@@ -139,7 +139,7 @@ def sign_in():
         return jsonify({'result': 'fail', 'msg': '아이디/패스워드가 일치하지 않습니다.'})
 
 
-#  Recommend 페이지 - 220419 DY
+#  Recommend 페이지 - 220509 DY
 @app.route('/FIN_list')
 def fin_listpage():
     token_receive = request.cookies.get('mytoken')

@@ -105,7 +105,21 @@
 </head>
 <body>
 <header>
-    <nav class="nav">
+    <div id="nav">
+        <ul class="nav_bar">
+            <li class="nav_bar_li">
+                <a href="">파도정보</a>
+            </li>
+            <li>
+                <a href="">게시판</a>
+            </li>
+        </ul>
+
+    </div>
+    <div id="logo">
+        <a href="/"> <img src="static\logo.png" alt="logo"></a>
+    </div>
+    <div class="head_user">
         <ul class="clearfix">
             <strong>
                 <li class="nav-text">
@@ -115,130 +129,130 @@
                     </a>
                 </li>
             </strong>
-            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="loginModalLabel">
-                                로그인</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="floatingInputID"
-                                               placeholder="Type">
-                                        <label for="floatingInputID">ID</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="password" class="form-control" id="floatingInputPW"
-                                               placeholder="Name">
-                                        <label for="floatingInputPW">Password</label>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer" id="signup_modal">
-                            <button type="button" class="btn btn-secondary posting-btn-close"
-                                    data-bs-dismiss="modal">
-                                취소
-                            </button>
-                            <button onclick="login()" type="button" class="btn btn-primary posting-btn-save">
-                                로그인
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <strong>
-            <li class="nav-text">
-                <a type="button" data-bs-toggle="modal"
-                   data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
-                    <i class="fa-solid fa-pen-to-square"></i>회원가입
-                </a></li>
-        </strong>
+            <strong>
+                <li class="nav-text">
+                    <a type="button" data-bs-toggle="modal"
+                       data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
+                        <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
+            </strong>
         </ul>
-    </nav>
+    </div>
 
-        <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="signUpModalLabel">
-                            회원 가입</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <div class="input_data form-floating">
-                                    <input type="text" class="form-control" id="floatingInput_ID" placeholder="ID"
-                                           maxlength="12"
-                                           onkeyup="checkId(this.value)">
-                                    <label for="floatingInput_ID">ID : 4~12자리 영문,숫자만 가능</label>
-                                    <button onclick="users_idCheck()" type="button" class="btn btn-dark">중복확인</button>
-                                </div>
-                                <label for="floatingInput_ID" id="checkIdResult"></label>
-                                <div class="input_data mb-3">
-                                    <div class="input_data mb-3">
-                                        <input type="password" class="form-control" id="floatingInput_PW"
-                                               placeholder="Password"
-                                               onkeyup="checkPassword(this.value)" maxlength="16">
-                                        <label for="floatingInput_PW">Password : 8~16자리 영문자,숫자,특수문자 조합</label>
-                                    </div>
-                                    <label for="floatingInput_PW" id="checkPasswordResult"></label>
-                                </div>
-                                <div class="input_data mb-3">
-                                    <div class="input_data mb-3">
-                                        <input type="password" class="form-control" id="floatingInput_PW_Check"
-                                               placeholder="Password Check"
-                                               onkeyup="checkPasswordConfirm(this.value)" maxlength="16">
-                                        <label for="floatingInput_PW_Check">Password Check</label>
-                                    </div>
-                                    <label for="floatingInput_PW_Check" id="passwordConfirmResult"></label>
-                                </div>
-                                <div class="input_data mb-3">
-                                    <div class="input_data form-floating">
-                                        <input type="text" class="form-control" id="floatingInput_name"
-                                               placeholder="name"
-                                               maxlength="20">
-                                        <label for="floatingInput_name">name</label>
-                                    </div>
-                                </div>
-                                <div class="input_data mb-3">
-                                    <div class="input_data form-floating">
-                                        <input type="text" class="form-control" id="floatingInput_keyword"
-                                               placeholder="findKeyword"
-                                               maxlength="20">
-                                        <label for="floatingInput_name">비밀번호 찾기 키워드</label>
-                                    </div>
-                                </div>
-                                <div class="form-floating mb-3">
-
-                                </div>
-                                <div class="form-floating mb-3">
-
-                                </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">
+                        로그인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingInputID"
+                                       placeholder="Type">
+                                <label for="floatingInputID">ID</label>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer" id="login_modal">
-                        <button type="button" class="btn btn-secondary posting-btn-close"
-                                data-bs-dismiss="modal">
-                            취소
-                        </button>
-                        <button onclick="users_signUp()" type="button" class="btn btn-primary posting-btn-save">
-                            회원가입
-                        </button>
-                    </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="floatingInputPW"
+                                       placeholder="Name">
+                                <label for="floatingInputPW">Password</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="signup_modal">
+                    <button type="button" class="btn btn-secondary posting-btn-close"
+                            data-bs-dismiss="modal">
+                        취소
+                    </button>
+                    <button onclick="login()" type="button" class="btn btn-primary posting-btn-save">
+                        로그인
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signUpModalLabel">
+                        회원 가입</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <div class="input_data form-floating">
+                                <input type="text" class="form-control" id="floatingInput_ID" placeholder="ID"
+                                       maxlength="12"
+                                       onkeyup="checkId(this.value)">
+                                <label for="floatingInput_ID">ID : 4~12자리 영문,숫자만 가능</label>
+                                <button onclick="users_idCheck()" type="button" class="btn btn-dark">중복확인</button>
+                            </div>
+                            <label for="floatingInput_ID" id="checkIdResult"></label>
+                            <div class="input_data mb-3">
+                                <div class="input_data mb-3">
+                                    <input type="password" class="form-control" id="floatingInput_PW"
+                                           placeholder="Password"
+                                           onkeyup="checkPassword(this.value)" maxlength="16">
+                                    <label for="floatingInput_PW">Password : 8~16자리 영문자,숫자,특수문자 조합</label>
+                                </div>
+                                <label for="floatingInput_PW" id="checkPasswordResult"></label>
+                            </div>
+                            <div class="input_data mb-3">
+                                <div class="input_data mb-3">
+                                    <input type="password" class="form-control" id="floatingInput_PW_Check"
+                                           placeholder="Password Check"
+                                           onkeyup="checkPasswordConfirm(this.value)" maxlength="16">
+                                    <label for="floatingInput_PW_Check">Password Check</label>
+                                </div>
+                                <label for="floatingInput_PW_Check" id="passwordConfirmResult"></label>
+                            </div>
+                            <div class="input_data mb-3">
+                                <div class="input_data form-floating">
+                                    <input type="text" class="form-control" id="floatingInput_name"
+                                           placeholder="name"
+                                           maxlength="20">
+                                    <label for="floatingInput_name">name</label>
+                                </div>
+                            </div>
+                            <div class="input_data mb-3">
+                                <div class="input_data form-floating">
+                                    <input type="text" class="form-control" id="floatingInput_keyword"
+                                           placeholder="findKeyword"
+                                           maxlength="20">
+                                    <label for="floatingInput_name">비밀번호 찾기 키워드</label>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-3">
+
+                            </div>
+                            <div class="form-floating mb-3">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" id="login_modal">
+                    <button type="button" class="btn btn-secondary posting-btn-close"
+                            data-bs-dismiss="modal">
+                        취소
+                    </button>
+                    <button onclick="users_signUp()" type="button" class="btn btn-primary posting-btn-save">
+                        회원가입
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </header>
 
 

@@ -134,7 +134,12 @@ function users_signUp() {
 // 아이디 중복체크
 function users_idCheck() {
     let id = $('#floatingInput_ID').val()
-    $.ajax({
+    checkIdDuplicationResult = false
+    var regex = new RegExp(/^[A-Za-z0-9]{4,12}$/); // 4~12자리 영문,숫자 조합 정규 표현식 활용
+    var element = document.getElementById('checkIdResult');
+    if (regex.exec(id)) {
+        checkIdResult = true; // 전역변수값을 true 로 변경
+        $.ajax({
         type: "GET",
         url: "/users_idCheck",
         data: {id_give: id},
@@ -148,11 +153,8 @@ function users_idCheck() {
             }
         }
     })
+    } else {
+        alert("사용할수 없습니다.")
+    }
 }
-
-
-
-
-
-// 김민수 : 회원 가입 및 관리 기능 =================================================================================
 
