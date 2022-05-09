@@ -27,47 +27,48 @@
         }
 
 
-        .main_header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 100px;
-
+        #main_header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
         }
 
-
-        .logo {
-
-            display: table;
-            margin-left: auto;
-            margin-right: auto;
-
-
+        #nav {
+            float: left;
+            margin-top: 80px;
         }
 
         .nav_bar {
-            float: left;
             display: flex;
-            flex-direction: low;
             list-style-type: none;
+
+        }
+
+        #logo {
+            margin: 0px 300px 0px 300px;
+            float: left;
+
+        }
+
+        .head_user{
+            display: inline;
+            flex-direction: low;
+            justify-content: start;
+            align-items: start;
+            position: absolute;
+            margin-top: 80px;
+
 
 
         }
 
         .nav_bar_li {
+            float: left;
             padding-right: 20px;
         }
 
-
-        .nav_bar > button {
-            display: inline;
-            flex-direction: low;
-            justify-content: start;
-            align-items: start;
-            float: right;
-
-        }
 
         .area {
 
@@ -88,19 +89,27 @@
 
         }
 
-        .area_top_title{
+        .area_top_title {
 
             margin: 50px auto 50px auto;
         }
+
         .card {
             text-align: center;
             width: 50%;
             float: left;
 
         }
-        a{
+
+        a {
             text-decoration-line: none;
+            color: black;
         }
+
+        .head_user > button:hover {
+            border: 3px solid white;
+        }
+
 
 
     </style>
@@ -109,25 +118,28 @@
     </script>
 </head>
 <body>
-<div class="main_header">
-    <div class="logo">
-        <a href="index.html"> <img src="\minproject_FIN\static\logo.png" alt="logo""></a>
-    </div>
-    <div>
-        <ul class="nav_bar">
-            <li class="nav_bar_li">
-                <a href="">파도정보</a>
-            </li>
-            <li>
-                <a href="">게시판</a>
-            </li>
-        </ul>
+<div id="main_header">
+    <header>
+        <div id="nav">
+            <ul class="nav_bar">
+                <li class="nav_bar_li">
+                    <a href="">파도정보</a>
+                </li>
+                <li>
+                    <a href="">게시판</a>
+                </li>
+            </ul>
 
-    </div>
-    <div class="head_user">
-        <button onclick="">로그인</button>
-        <button onclick="">회원가입</button>
-    </div>
+        </div>
+        <div id="logo">
+            <a href="index.html"> <img src="\minproject_FIN\static\logo.png" alt="logo""></a>
+        </div>
+        <div class="head_user">
+            <button onclick="" type="button" class="btn btn-light">로그인</button>
+            <button onclick="" type="button" class="btn btn-light">회원가입</button>
+        </div>
+    </header>
+
 
 </div>
 
