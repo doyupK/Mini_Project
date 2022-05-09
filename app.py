@@ -8,15 +8,6 @@ from datetime import datetime, timedelta
 import jwt as jwt
 
 
-ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.kxazb.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)  # KDY
-# client = MongoClient('mongodb+srv://lojy:loej2011@cluster0.ojxiz.mongodb.net/mCluster0?retryWrites=true&w=majority') 임정현님
-db = client.dbsparta
-app = Flask(__name__)
-
-SECRET_KEY = 'SPARTA'
-
 
 @app.route('/')
 def home():
