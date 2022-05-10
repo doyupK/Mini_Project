@@ -25,6 +25,9 @@
             margin-top: 3%;
         }
 
+        .select-location{
+            color: black;
+        }
         .card {
             box-shadow: 4px 4px 4px;
 
@@ -38,6 +41,12 @@
     </style>
 
     <title>끌[FIN]</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src = "../static/js/location_list.js"></script>
+
 </head>
 <body>
 <header class="site-header sticky-top">
@@ -52,104 +61,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
-                <div class="row row-cols-1 row-cols-md-4 g-4 ">
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
+                <div class="col-md-8">
+                    <ul class="nav nav-tabs" id="box-tabs" style="width: 70vw;">
+
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content w-100" id="box-contents" style="width: 70vw; padding-top: 5px;">
                     </div>
                 </div>
+
             </div>
             <div class="col-md-4" style="margin-top: -7%; padding-left: 4%">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
@@ -213,10 +134,7 @@
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-<script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     function viewPhoto(photo) {
         if (!photo.files) return;
