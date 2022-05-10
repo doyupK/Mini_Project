@@ -134,6 +134,18 @@ a {
     justify-content: center;
 }
 
+/* Sign Up Modal */
+
+#floatingInput_ID{
+    display: inline-block;
+    width: 70%;
+}
+
+.input_data > button {
+    height: 40px;
+}
+
+/* Recommend Body */
 
 .recommended_list {
     font-size: 24px;

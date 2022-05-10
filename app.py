@@ -3,26 +3,24 @@ import hashlib
 from django.core.paginator import Paginator
 from pymongo import MongoClient
 import certifi
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 import jwt as jwt
+import data_resource
 
 ca = certifi.where()
 client = MongoClient('localhost', 27017)
 db = client.sparta_1week
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.kxazb.mongodb.net/Cluster0?retryWrites=true&w=majority',
-#                      tlsCAFile=ca)  # KDY
-# db = client.dbsparta
 app = Flask(__name__)
 
-SECRET_KEY = 'SPARTA'
+hash_key = data_source.SECRET_KEY
 
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
 
     if token_receive is not None:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
         user_info = db.fin_users.find_one({"id": payload["id"]})
         login_status = 1
         return render_template('index.html', user_info=user_info,
@@ -37,7 +35,7 @@ def home():
 def save_posts():
     token_receive = request.cookies.get('mytoken')
 
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
     user_info = db.fin_users.find_one({"id": payload["id"]})
 
     review_list = list(db.fin_Reviews.find({}, {'_id': False}))
@@ -132,7 +130,7 @@ def sign_in():
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
 
-        token = jwt.encode(payload, SECRET_KEY,
+        token = jwt.encode(payload, hash_key,
                            algorithm='HS256')  # .decode('utf8')
         # .decode('utf8')  # 토큰을 건내줌.
         return jsonify({'result': 'success', 'token': token, 'msg': '환영합니다.'})
@@ -161,7 +159,7 @@ def fin_listpage():
     page_numbers_range = paginator.page_range[start_index:end_index]
 
     if token_receive is not None:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
         user_info = db.fin_users.find_one({"id": payload["id"]})
         login_status = 1
         return render_template('recommend_list.html', user_info=user_info, login_status=login_status, posts=posts,
@@ -185,7 +183,7 @@ def detail(keyword):
     review = db.fin_Reviews.find_one({'post_num': find_keyword})
     # 로그인 정보(token)있을 시
     if token_receive is not None:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
         user_info = db.fin_users.find_one({"id": payload["id"]})
         login_status = 1
         if len(comments_name) == 0:
@@ -222,7 +220,7 @@ def save_comment():
     comment_receive = request.form['comment_give']
 
     token_receive = request.cookies.get('mytoken')
-    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
     user_info = db.fin_users.find_one({"id": payload["id"]})
     if pageInfo_receive == "fin":
         # DB에 코멘트의 마지막 ID 값 읽어서 +1

@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
           rel="stylesheet">
     <!--    CSS-->
-    <link rel="stylesheet" href="../static/main.css">
-    <link rel="stylesheet" href="../static/re_detail.css">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="../static/css/re_detail.css">
 
     <!--    JS-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -32,6 +32,11 @@
     </style>
 
     <script>
+        function logout() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!');
+            window.location.href = "/";
+        }
 
         function saving() {
             /*input 데이터 가져오기*/
@@ -240,7 +245,7 @@
                     </ul>
                 </nav>
                 <a href="/">
-                    <em><img src="../static/logo.png" alt="wineNot_logo"></em>
+                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
                 </a>
                 <nav class="user_nav">
                     <ul>
