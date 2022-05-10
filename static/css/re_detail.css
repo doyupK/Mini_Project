@@ -28,6 +28,7 @@ section {
     max-width: 600px;
     height: auto;
     padding: 8%;
+    border-radius: 15%;
 }
 
 #title {

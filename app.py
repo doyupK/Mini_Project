@@ -1,21 +1,23 @@
 import hashlib
-
 from django.core.paginator import Paginator
 from pymongo import MongoClient
 import certifi
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 import jwt as jwt
+import googlemaps
 import data_resource
-
 from get_data import get_locations, get_list_by_location
+
+gmap = data_resource.gmap
 
 ca = certifi.where()
 client = MongoClient('localhost', 27017)
 db = client.sparta_1week
 app = Flask(__name__)
 
-hash_key = data_source.SECRET_KEY
+hash_key = data_resource.SECRET_KEY
+
 
 @app.route('/')
 def home():
@@ -31,6 +33,7 @@ def home():
         login_status = 0
         return render_template('index.html', login_status=login_status)
 
+
 # 도 하위 시별 리스트
 @app.route('/city_lists')
 def locations():
@@ -43,6 +46,7 @@ def locations():
 def find_by_city():
     received_city = request.args.get("city")
     return jsonify(get_list_by_location(received_city))
+
 
 # fin 게시글 저장 - 220509 DY
 @app.route('/surfer/write_post', methods=['POST'])
@@ -62,6 +66,10 @@ def save_posts():
 
     location_receive = request.form['location_give']
     name_receive = request.form['name_give']
+    # 주소 -> 위/경도 변환
+    result = gmap.geocode(name_receive)
+    n_lat = result[0]['geometry']['location']['lat']
+    n_lng = result[0]['geometry']['location']['lng']
     content_receive = request.form['content_give']
 
     file = request.files["file_give"]
@@ -84,11 +92,13 @@ def save_posts():
         'location': location_receive,
         'spot_name': name_receive,
         'content': content_receive,
+        'lat': n_lat,
+        'lng': n_lng,
         'file': f'{filename}.{extension}',
         'time': today.strftime('%Y.%m.%d'),
         'COMMENT': []
     }
-    # collection에 저장
+
     db.fin_Reviews.insert_one(doc)
 
     return jsonify({'msg': '저장 완료!'})
@@ -115,6 +125,7 @@ def users():
     db.fin_users.insert_one(doc)
 
     return jsonify({'msg': '회원 가입 완료!'})
+
 
 # 아이디 중복 확인 220510 DY
 @app.route("/users_idCheck", methods=["GET"])
@@ -143,7 +154,6 @@ def sign_in():
             'id': id_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
-
         token = jwt.encode(payload, hash_key,
                            algorithm='HS256')  # .decode('utf8')
         # .decode('utf8')  # 토큰을 건내줌.
@@ -277,199 +287,6 @@ def delete_comment():
                                {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
-
-
-
-# Recommend 상세페이지 by DY
-@app.route('/detail/<keyword>')
-def detail(keyword):
-    # 로그인 정보 불러오기
-    find_keyword = int(keyword)
-    token_receive = request.cookies.get('mytoken')
-    # 코멘트 불러오기
-    comments_name = db.fin_Reviews.find_one({'post_num': find_keyword}, {
-        'COMMENT': 1, '_id': False})
-    # 해당(keyword) 게시물 정보 불러오기
-    review = db.fin_Reviews.find_one({'post_num': find_keyword})
-    # 로그인 정보(token)있을 시
-    if token_receive is not None:
-        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
-        user_info = db.fin_users.find_one({"id": payload["id"]})
-        login_status = 1
-        if len(comments_name) == 0:
-            return render_template('recommend_detail.html',
-                                   review=review, user_info=user_info,
-                                   login_status=login_status)
-        else:
-            comments = list(comments_name['COMMENT'])
-            return render_template('recommend_detail.html',
-                                   review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
-    # 로그인 정보(token)없을 시
-    else:
-        user_info = None
-        login_status = 0
-        if len(comments_name) == 0:
-            return render_template('recommend_detail.html',
-                                   review=review, user_info=user_info,
-                                   login_status=login_status)
-        else:
-            comments = list(comments_name['COMMENT'])
-            return render_template('recommend_detail.html',
-                                   review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
-
-
-# 코멘트 저장 220429 DY
-@app.route('/saveComment', methods=['POST'])
-def save_comment():
-    global comments
-    pageInfo_receive = request.form['pageInfo_give']
-    postNum_receive = int(request.form['postNum_give'])
-    userName_receive = request.form['userName_give']
-    comment_receive = request.form['comment_give']
-
-    token_receive = request.cookies.get('mytoken')
-    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
-    user_info = db.fin_users.find_one({"id": payload["id"]})
-    if pageInfo_receive == "fin":
-        # DB에 코멘트의 마지막 ID 값 읽어서 +1
-        comments = db.fin_Reviews.find_one({'post_num': postNum_receive}, {'COMMENT': 1, '_id': False})
-
-    if len(comments['COMMENT']) == 0:
-        doc = {
-            'comment_id': 1,
-            'userID': user_info['id'],
-            'username': userName_receive,
-            'comment': comment_receive
-        }
-    else:
-        list_comment = list(comments['COMMENT'])
-        last_comment = list_comment[-1]
-        new_comment_id = int(last_comment.get('comment_id')) + 1
-
-        doc = {
-            'comment_id': new_comment_id,
-            'userID': user_info['id'],
-            'username': userName_receive,
-            'comment': comment_receive
-        }
-    if pageInfo_receive == "fin":
-        db.fin_Reviews.update_many({'post_num': postNum_receive}, {'$addToSet': {'COMMENT': doc}})
-
-    return jsonify({'msg': '저장 완료!'})
-
-
-# Detail Page Comment 삭제 by DY
-@app.route('/delete_comment', methods=['POST'])
-def delete_comment():
-    pageInfo_receive = request.form['pageInfo_give']
-    postNum_receive = int(request.form['postNum_give'])
-    commentNum_receive = int(request.form['commentNum_give'])
-
-    # post Number 찾아서 해당 게시글 DB 정보에서 삭제
-    if pageInfo_receive == "fin":
-        db.fin_Reviews.update_many({'post_num': postNum_receive},
-                               {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
-
-    return jsonify({'msg': '삭제 완료!'})
-
-
-
-# Recommend 상세페이지 by DY
-@app.route('/detail/<keyword>')
-def detail(keyword):
-    # 로그인 정보 불러오기
-    find_keyword = int(keyword)
-    token_receive = request.cookies.get('mytoken')
-    # 코멘트 불러오기
-    comments_name = db.fin_Reviews.find_one({'post_num': find_keyword}, {
-        'COMMENT': 1, '_id': False})
-    # 해당(keyword) 게시물 정보 불러오기
-    review = db.fin_Reviews.find_one({'post_num': find_keyword})
-    # 로그인 정보(token)있을 시
-    if token_receive is not None:
-        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
-        user_info = db.fin_users.find_one({"id": payload["id"]})
-        login_status = 1
-        if len(comments_name) == 0:
-            return render_template('recommend_detail.html',
-                                   review=review, user_info=user_info,
-                                   login_status=login_status)
-        else:
-            comments = list(comments_name['COMMENT'])
-            return render_template('recommend_detail.html',
-                                   review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
-    # 로그인 정보(token)없을 시
-    else:
-        user_info = None
-        login_status = 0
-        if len(comments_name) == 0:
-            return render_template('recommend_detail.html',
-                                   review=review, user_info=user_info,
-                                   login_status=login_status)
-        else:
-            comments = list(comments_name['COMMENT'])
-            return render_template('recommend_detail.html',
-                                   review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
-
-
-# 코멘트 저장 220429 DY
-@app.route('/saveComment', methods=['POST'])
-def save_comment():
-    global comments
-    pageInfo_receive = request.form['pageInfo_give']
-    postNum_receive = int(request.form['postNum_give'])
-    userName_receive = request.form['userName_give']
-    comment_receive = request.form['comment_give']
-
-    token_receive = request.cookies.get('mytoken')
-    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
-    user_info = db.fin_users.find_one({"id": payload["id"]})
-    if pageInfo_receive == "fin":
-        # DB에 코멘트의 마지막 ID 값 읽어서 +1
-        comments = db.fin_Reviews.find_one({'post_num': postNum_receive}, {'COMMENT': 1, '_id': False})
-
-    if len(comments['COMMENT']) == 0:
-        doc = {
-            'comment_id': 1,
-            'userID': user_info['id'],
-            'username': userName_receive,
-            'comment': comment_receive
-        }
-    else:
-        list_comment = list(comments['COMMENT'])
-        last_comment = list_comment[-1]
-        new_comment_id = int(last_comment.get('comment_id')) + 1
-
-        doc = {
-            'comment_id': new_comment_id,
-            'userID': user_info['id'],
-            'username': userName_receive,
-            'comment': comment_receive
-        }
-    if pageInfo_receive == "fin":
-        db.fin_Reviews.update_many({'post_num': postNum_receive}, {'$addToSet': {'COMMENT': doc}})
-
-    return jsonify({'msg': '저장 완료!'})
-
-
-# Detail Page Comment 삭제 by DY
-@app.route('/delete_comment', methods=['POST'])
-def delete_comment():
-    pageInfo_receive = request.form['pageInfo_give']
-    postNum_receive = int(request.form['postNum_give'])
-    commentNum_receive = int(request.form['commentNum_give'])
-
-    # post Number 찾아서 해당 게시글 DB 정보에서 삭제
-    if pageInfo_receive == "fin":
-        db.fin_Reviews.update_many({'post_num': postNum_receive},
-                               {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
-
-    return jsonify({'msg': '삭제 완료!'})
-
 
 
 if __name__ == '__main__':
