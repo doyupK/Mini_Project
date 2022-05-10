@@ -15,7 +15,7 @@ li {
     z-index: 1;
 }
 .wrapper {
-    height: 800px;
+    height: 1200px;
     min-height: 100%;
 }
 
@@ -24,6 +24,7 @@ li {
     width: 1280px;
     /*height: 80px;*/
     margin: 0 auto;
+
 }
 .row {
     padding: 0 28px;
@@ -210,6 +211,12 @@ a {
     max-height: 300px;
     width: auto;
     margin: auto;
+}
+.card-body {
+    text-align: center;
+}
+.card-body > p{
+    margin: 0;
 }
 
 /* 페이지 링크 디자인 */
