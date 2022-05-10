@@ -227,8 +227,7 @@ def save_comment():
     if pageInfo_receive == "fin":
         # DB에 코멘트의 마지막 ID 값 읽어서 +1
         comments = db.fin_Reviews.find_one({'post_num': postNum_receive}, {'COMMENT': 1, '_id': False})
-    print(comments)
-    print(len(comments))
+
     if len(comments['COMMENT']) == 0:
         doc = {
             'comment_id': 1,
