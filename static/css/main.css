@@ -88,6 +88,8 @@ li {
     color: black;
     opacity: 0.3;
 }
+
+/*index middle*/
 .area {
     /*width: 50%;*/
     height: 800px;
@@ -98,22 +100,33 @@ li {
 
 .area_top {
     text-align: center;
-    margin-top: 100px;
+    margin-top: 80px;
     width: 50%;
     height: 800px;
     float: left;
 
 }
-
-.area_top_title {
-    margin: 50px auto 50px auto;
+.area_md {
+    width: 500px;
+    height: 800px;
+    margin: auto;
 }
 
-.card {
-    text-align: center;
-    width: 50%;
-    float: left;
+.area_top_title {
+    margin: 20px auto 20px auto;
+}
 
+.area_col {
+    width: 40%;
+    text-align: center;
+    box-shadow: 4px 4px 4px;
+    float: left;
+    margin: 0px 30px 30px 20px;
+
+}
+
+.area_col:hover {
+    box-shadow: 10px 10px 10px;
 }
 
 a {
