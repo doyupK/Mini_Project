@@ -8,9 +8,11 @@ with open('./static/location_data.json', 'r', encoding="UTF-8") as base:
 
 
 @cache
-def get_locations(do="강원"):
+def get_locations(do=0):
     countries = list()
-    countries = json_data["do"][do]
+    location = json_data["locations"]
+    print(do)
+    countries = json_data["do"][location[do]]
     print(countries)
     return countries
 

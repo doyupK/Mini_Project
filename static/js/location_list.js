@@ -1,21 +1,26 @@
 //해당 지역 시 목록
 function get_locations() {
-    let do_name = "강원"
+
+    let do_name = window.location.href
+    let do_num = do_name.substring(do_name.length - 1, do_name.length)
     $.ajax({
         type: "GET",
         url: "/city_lists",
-        data: {"do": do_name},
+        data: {"do": do_num},
         success: function (response) {
             let rows = response
             rows.forEach((data, i) => {
                 //UI 메서드
                 draw_tabs(data, i)
 
-                document.getElementsByClassName("select-location")[i].addEventListener('click',tab_event)
+                document.getElementsByClassName("select-location")[i].addEventListener('click', tab_event)
             })
         },
         complete: function () {
+            document.getElementsByClassName("select-location")[0].classList.add("active")
+            $('.tab-pane').eq(0).show()
             let first = document.getElementsByClassName("select-location")[0].innerHTML
+            console.log(first)
             get_select_data(first, 0)
 
         }
@@ -24,12 +29,12 @@ function get_locations() {
 
 function tab_event() {
 
-        let area = this.innerText
-        let allEl = document.getElementsByClassName("select-location")
-        let tabIdx = Array.from(allEl).indexOf(this)
-        console.log(tabIdx)
-        $('.cards-area').eq(tabIdx).empty()
-        get_select_data(area, tabIdx)
+    let area = this.innerText
+    let allEl = document.getElementsByClassName("select-location")
+    let tabIdx = Array.from(allEl).indexOf(this)
+    console.log(tabIdx)
+    $('.cards-area').eq(tabIdx).empty()
+    get_select_data(area, tabIdx)
 
 }
 
@@ -91,5 +96,6 @@ function draw_cards(data, i) {
 
     $('.cards-area').eq(i).append(card)
 }
+
 
 get_locations()

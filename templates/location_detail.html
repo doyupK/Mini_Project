@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="끌"/>
+    <meta property="og:description" content="서퍼들을 위한 해변 실시간 영상을 제공합니다."/>
+    <meta property="og:image" content="이미지 삽입"/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
+          rel="stylesheet">
+
+    <!-- fontawesome DY-->
+    <script src="https://kit.fontawesome.com/8f4978e361.js" crossorigin="anonymous"></script>
+
+    <!--    JS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>끌</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
+    <!--    CSS-->
+    <link rel="stylesheet" href="../static/css/main.css">
+    <!--    Sign Up 스크립트 불러오기   -->
+    <script src="../static/js/signup.js"></script>
+
+
+    <style>
+
+    </style>
+    <script>
+        function logout() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!');
+            window.location.href = "/";
+        }
+
+        function login() {
+            let username = $("#floatingInputID").val()
+            let password = $("#floatingInputPW").val()
+
+            if (username == "") {
+                alert('아이디를 입력해주세요.')
+                $("#floatingInput_id").focus()
+                return;
+            } else {
+                $("#floatingInput_id").text("")
+            }
+
+            if (password == "") {
+                alert('비밀번호를 입력해주세요.')
+                $("#floatingInput_PW").focus()
+                return;
+            } else {
+                $("#floatingInput_PW").text("")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    give_id: username,
+                    give_pw: password
+                },
+                success: function (response) {
+                    console.log('성공')
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token'], {path: '/'});
+                        alert(response['msg'])
+                        window.location.replace("/")
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+
+
+
+    </script>
+</head>
+<body>
+<!--                Login & sign Up Modal-->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">
+                    로그인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInputID"
+                                   placeholder="Type">
+                            <label for="floatingInputID">ID</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingInputPW"
+                                   placeholder="Name">
+                            <label for="floatingInputPW">Password</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="signup_modal">
+                <button type="button" class="btn btn-secondary posting-btn-close"
+                        data-bs-dismiss="modal">
+                    취소
+                </button>
+                <button onclick="login()" type="button" class="btn btn-primary posting-btn-save">
+                    로그인
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signUpModalLabel">
+                    회원 가입</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <div class="input_data form-floating">
+                            <input type="text" class="form-control" id="floatingInput_ID"
+                                   placeholder="ID"
+                                   maxlength="12"
+                                   onkeyup="checkId(this.value)">
+                            <label for="floatingInput_ID">ID : 4~12자리 영문,숫자만 가능</label>
+                            <button onclick="users_idCheck()" type="button" class="btn btn-dark">중복확인
+                            </button>
+                        </div>
+                        <label for="floatingInput_ID" id="checkIdResult"></label>
+                        <div class="input_data mb-3">
+                            <div class="input_data mb-3">
+                                <input type="password" class="form-control" id="floatingInput_PW"
+                                       placeholder="Password"
+                                       onkeyup="checkPassword(this.value)" maxlength="16">
+                                <label for="floatingInput_PW">Password : 8~16자리 영문자,숫자,특수문자 조합</label>
+                            </div>
+                            <label for="floatingInput_PW" id="checkPasswordResult"></label>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data mb-3">
+                                <input type="password" class="form-control" id="floatingInput_PW_Check"
+                                       placeholder="Password Check"
+                                       onkeyup="checkPasswordConfirm(this.value)" maxlength="16">
+                                <label for="floatingInput_PW_Check">Password Check</label>
+                            </div>
+                            <label for="floatingInput_PW_Check" id="passwordConfirmResult"></label>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data form-floating">
+                                <input type="text" class="form-control" id="floatingInput_name"
+                                       placeholder="name"
+                                       maxlength="20">
+                                <label for="floatingInput_name">name</label>
+                            </div>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data form-floating">
+                                <input type="text" class="form-control" id="floatingInput_keyword"
+                                       placeholder="findKeyword"
+                                       maxlength="20">
+                                <label for="floatingInput_name">비밀번호 찾기 키워드</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+
+                        </div>
+                        <div class="form-floating mb-3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="login_modal">
+                <button type="button" class="btn btn-secondary posting-btn-close"
+                        data-bs-dismiss="modal">
+                    취소
+                </button>
+                <button onclick="users_signUp()" type="button" class="btn btn-primary posting-btn-save">
+                    회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="header">
+                <nav class="title_bar">
+                    <ul>
+                        <li class="nav-text">
+                            <a href="">파도정보</a>
+                        </li>
+                        <li class="nav-text">
+                            <a href="/FIN_list">게시판</a>
+                        </li>
+                    </ul>
+                </nav>
+                <a href="/">
+                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
+                </a>
+                <nav class="user_nav">
+                    <ul>
+                        {% if login_status == 0 %}
+                        <strong>
+                            <li class="nav-text">
+                                <a type="button" data-bs-toggle="modal"
+                                   data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
+                                    <i class="fa-regular fa-user"></i>로그인
+                                </a>
+                            </li>
+                        </strong>
+                        <strong>
+                            <li class="nav-text">
+                                <a type="button" data-bs-toggle="modal"
+                                   data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
+                                    <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
+                        </strong>
+                        {% elif login_status == 1 %}
+                        <li class="nav-text"><a>{{user_info.name}} 님</a></li>
+                        <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
+                            로그아웃</a></li>
+                        {% endif %}
+                    </ul>
+
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+
+</main>
+
+<!-- footer -->
+    <footer id="footer">
+        <div id="footer_info">
+            <div class="foot_container">
+                <div class="row">
+                    <div class="footer_info">
+                        <h2>
+                            <img src="../static/img/logo.png">
+                        </h2>
+                        <ul>
+                            <li>4조</li>
+                            <li>이정찬</li>
+                            <li>임정현</li>
+                            <li>김도엽</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
