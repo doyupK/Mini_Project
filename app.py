@@ -1,27 +1,47 @@
 import hashlib
-
-from django.core.paginator import Paginator
-from pymongo import MongoClient
-import certifi
-from flask import Flask, render_template, request, jsonify, redirect, url_for
 from datetime import datetime, timedelta
-import jwt as jwt
 
+import jwt as jwt
+from django.conf.global_settings import SECRET_KEY
+from django.core.paginator import Paginator
+from flask import Flask, render_template, request, jsonify
+from pymongo import MongoClient
+
+from get_data import get_locations, get_list_by_location
+
+app = Flask(__name__)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.kxum4.mongodb.net/Cluster0?retryWrites=true&w=majority')
+db = client.dbsparta
 
 
 @app.route('/')
 def home():
-    token_receive = request.cookies.get('mytoken')
+    # token_receive = request.cookies.get('mytoken')
+    #
+    # if token_receive is not None:
+    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.fin_users.find_one({"id": payload["id"]})
+    #     login_status = 1
+    #     return render_template('index.html', user_info=user_info,
+    #                            login_status=login_status)
+    # else:
+    #     login_status = 0
+    #     return render_template('index.html', login_status=login_status)
+    return render_template('location_list.html')
 
-    if token_receive is not None:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.fin_users.find_one({"id": payload["id"]})
-        login_status = 1
-        return render_template('index.html', user_info=user_info,
-                               login_status=login_status)
-    else:
-        login_status = 0
-        return render_template('index.html', login_status=login_status)
+
+# 도 하위 시별 리스트
+@app.route('/city_lists')
+def locations():
+    select_do = request.args.get("do")
+    return jsonify(get_locations(select_do))
+
+
+# 도에 해당 하는 지역 리스트 반환
+@app.route('/find_by_city')
+def find_by_city():
+    received_city = request.args.get("city")
+    return jsonify(get_list_by_location(received_city))
 
 
 # fin 게시글 저장 - 220509 DY
@@ -94,6 +114,7 @@ def users():
     db.fin_users.insert_one(doc)
 
     return jsonify({'msg': '회원 가입 완료!'})
+
 
 # 아이디 중복 확인 by DY
 @app.route("/users_idCheck", methods=["GET"])
