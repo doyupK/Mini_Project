@@ -15,7 +15,7 @@ li {
     z-index: 1;
 }
 .wrapper {
-    /*height: 100px;*/
+    height: 800px;
     min-height: 100%;
 }
 
@@ -204,4 +204,45 @@ a {
     content: "🛹";
     background-color: white;
     margin-left: 5px;
+}
+
+/* 푸터 */
+#footer {
+    margin-top: 150px;
+    position: absolute;
+    width: 100%;
+    background-color: rgba(167, 194, 255, 0.4);
+}
+
+
+.foot_container {
+    position: relative;
+    width: 1280px;
+    margin: 0 auto;
+
+}
+
+.footer_info {
+    padding: 50px 0;
+    width: 80%;
+
+}
+
+.footer_info h2 img {
+    width: 180px;
+}
+
+.footer_info ul {
+    padding: 15px 0;
+}
+
+.footer_info ul li {
+    position: relative;
+    display: inline;
+    padding-right: 16px;
+    white-space: nowrap;
+}
+
+.footer_info li {
+    color: #000000;
 }

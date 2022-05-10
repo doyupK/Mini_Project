@@ -25,6 +25,7 @@ section {
 
 .Review_img {
     width: auto;
+    max-width: 600px;
     height: auto;
     padding: 8%;
 }
