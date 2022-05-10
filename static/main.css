@@ -15,7 +15,7 @@ li {
     z-index: 1;
 }
 .wrapper {
-    height: auto;
+    /*height: 100px;*/
     min-height: 100%;
 }
 
@@ -26,7 +26,6 @@ li {
     margin: 0 auto;
 }
 .row {
-
     padding: 0 28px;
 }
 .header {
@@ -89,16 +88,50 @@ li {
     color: black;
     opacity: 0.3;
 }
+.area {
+    /*width: 50%;*/
+    height: 800px;
+    float: left;
+    padding-left: 50px;
+    display: flex;
+}
+
+.area_top {
+    text-align: center;
+    margin-top: 100px;
+    width: 50%;
+    height: 800px;
+    float: left;
+
+}
+
+.area_top_title {
+    margin: 50px auto 50px auto;
+}
+
+.card {
+    text-align: center;
+    width: 50%;
+    float: left;
+
+}
+
+a {
+    text-decoration-line: none;
+    color: black;
+}
+
+.head_user > button:hover {
+    border: 3px solid white;
+}
+
+
+
+
 
 /* Login Modal */
 #login_modal{
     justify-content: center;
-}
-
-/* 추천 게시글 list Body */
-.wrapper {
-    height: auto;
-    min-height: 100%;
 }
 
 
@@ -121,3 +154,54 @@ li {
     font-weight: 700;
 }
 
+
+
+/* FIN List */
+.post_size img{
+    height: 300px;
+    display: flex;
+    width: 230px;
+    margin: auto;
+    max-width: 240px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+}
+
+.post_size img:hover {
+    transform: scale(1.2);
+}
+.card {
+    border: none;
+    margin-top: 60px;
+}
+.card_contents {
+    width: 230px;
+    height: 130px;
+    padding-top: 30px;
+}
+
+#post_img {
+    display: flex;
+    max-height: 300px;
+    width: auto;
+    margin: auto;
+}
+
+/* 페이지 링크 디자인 */
+.page-item .page-link {
+    border: none;
+}
+.page-item.disabled .page-link {
+    border: none;
+    margin-left: 5px;
+}
+.page-item.active .page-link{
+    background-color: white;
+    border: none;
+    margin-left: 5px;
+}
+.page-link span::after {
+    content: "🛹";
+    background-color: white;
+    margin-left: 5px;
+}

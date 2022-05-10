@@ -7,7 +7,13 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from datetime import datetime, timedelta
 import jwt as jwt
 
+ca = certifi.where()
+client = MongoClient('mongodb+srv://test:sparta@cluster0.kxazb.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=ca)  # KDY
+db = client.dbsparta
+app = Flask(__name__)
 
+SECRET_KEY = 'SPARTA'
 
 @app.route('/')
 def home():
@@ -59,8 +65,8 @@ def save_posts():
 
     doc = {
         'post_num': count,
-        # 'username': user_info["id"],
-        # 'profile_name': user_info["name"],
+        'username': user_info["id"],
+        'profile_name': user_info["name"],
         'location': location_receive,
         'spot_name': name_receive,
         'content': content_receive,
@@ -95,7 +101,7 @@ def users():
 
     return jsonify({'msg': '회원 가입 완료!'})
 
-# 아이디 중복 확인 by DY
+# 아이디 중복 확인 220510 DY
 @app.route("/users_idCheck", methods=["GET"])
 def getId():
     id_receive = request.values.get('id_give')
@@ -106,7 +112,8 @@ def getId():
         return jsonify({'user': False})
 
 
-@app.route('/sign_in', methods=['POST'])  # 로그인 API
+# 로그인 220510 DY
+@app.route('/sign_in', methods=['POST'])
 def sign_in():
     id_receive = request.form['give_id']
     pw_receive = request.form['give_pw']
