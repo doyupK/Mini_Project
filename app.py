@@ -8,9 +8,11 @@ from datetime import datetime, timedelta
 import jwt as jwt
 
 ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.kxazb.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)  # KDY
-db = client.dbsparta
+client = MongoClient('localhost', 27017)
+db = client.sparta_1week
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.kxazb.mongodb.net/Cluster0?retryWrites=true&w=majority',
+#                      tlsCAFile=ca)  # KDY
+# db = client.dbsparta
 app = Flask(__name__)
 
 SECRET_KEY = 'SPARTA'
@@ -71,7 +73,8 @@ def save_posts():
         'spot_name': name_receive,
         'content': content_receive,
         'file': f'{filename}.{extension}',
-        'time': today.strftime('%Y.%m.%d')
+        'time': today.strftime('%Y.%m.%d'),
+        'COMMENT': []
     }
     # collection에 저장
     db.fin_Reviews.insert_one(doc)
@@ -224,7 +227,8 @@ def save_comment():
     if pageInfo_receive == "fin":
         # DB에 코멘트의 마지막 ID 값 읽어서 +1
         comments = db.fin_Reviews.find_one({'post_num': postNum_receive}, {'COMMENT': 1, '_id': False})
-
+    print(comments)
+    print(len(comments))
     if len(comments['COMMENT']) == 0:
         doc = {
             'comment_id': 1,
