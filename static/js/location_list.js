@@ -9,6 +9,7 @@ function get_locations() {
         url: "/city_lists",
         data: {"do": do_num},
         success: function (response) {
+            $('.cards-area').eq(0).empty()
             let rows = response
             rows.forEach((data, i) => {
                 //UI 메서드
@@ -17,15 +18,15 @@ function get_locations() {
             })
         },
         complete: function () {
-            document.getElementsByClassName("select-location")[0].classList.add("active")
-            $('.tab-pane').eq(0).show()
-            let first = document.getElementsByClassName("select-location")[0].innerHTML
-            console.log(first)
-            get_select_data(first, 0)
+
+            document.getElementsByClassName("select-location")[0].click()
+            // let first = document.getElementsByClassName("select-location")[0].innerHTML
+            // console.log(first)
+            // get_select_data(first, 0)
 
             if (!!sessionStorage.getItem("active")) {
                 let mapIdx = sessionStorage.getItem("active")
-                $(".land").eq(mapIdx).css("fill","cadetblue").css("stroke","aquamarine");
+                $(".land").eq(mapIdx).css("fill", "cadetblue").css("stroke", "aquamarine");
             }
 
         }
@@ -37,7 +38,6 @@ function tab_event() {
     let area = this.innerText
     let allEl = document.getElementsByClassName("select-location")
     let tabIdx = Array.from(allEl).indexOf(this)
-    console.log(tabIdx)
     $('.cards-area').eq(tabIdx).empty()
     get_select_data(area, tabIdx)
 
@@ -57,6 +57,17 @@ function get_select_data(area, tabIdx) {
             rows.forEach((data) => {
                 //UI 메서드
                 draw_cards(data, tabIdx)
+            })
+        },
+        complete: function () {
+            let cards = document.getElementsByClassName('card');
+            [...cards].forEach((card, idx) => {
+                card.addEventListener('click', (e) => {
+                    let title = document.getElementsByClassName('beach-title')[idx].innerHTML
+                    let lat = document.getElementsByClassName("lat")[idx].innerHTML
+                    let lng = document.getElementsByClassName("lng")[idx].innerHTML
+                    window.location.href = "/locations/detail/"+title+"/"+lat+"/"+lng
+                })
             })
         }
     });
@@ -84,17 +95,15 @@ function draw_tabs(locations, i) {
 // UI 생성 tab content, cards
 // param('filtering location forecast data')
 function draw_cards(data, i) {
-    let {beach, wind_speed, water_temp, wind_direct, obs_time} = data
+    let {name, lat, lng} = data
     let card = ` <div class="col">
-                        <div class="card h-100">
+                        <div class="card h-100 w-100">
                             <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title"><b>${beach}</b></h5>
+                                <h5 class="card-title"><b class ="beach-title">${name}</b></h5>
                                 <p class="card-text"></p>
-                                <p class="card-text">현재 수온: &nbsp;${water_temp}C°&nbsp;</p>
-                                <p class="card-text">현재 풍속: &nbsp;${wind_speed}m/s&nbsp;</p>
-                                <p class="card-text">현재 풍향: &nbsp;${wind_direct}&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
+                                <span class = 'lat' style="display: none">${lat}</span>
+                                <span class = 'lng' style="display: none">${lng}</span>
                             </div>
                         </div>
                     </div>`

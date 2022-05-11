@@ -6,14 +6,15 @@ import requests
 with open('./static/location_data.json', 'r', encoding="UTF-8") as base:
     json_data = json.load(base)
 
+with open('./static/beach_info.json', 'r', encoding="UTF-8") as f:
+    json_beach_data = json.load(f)
+
 
 @cache
 def get_locations(do=0):
     countries = list()
     location = json_data["locations"]
-    print(do)
     countries = json_data["do"][location[do]]
-    print(countries)
     return countries
 
 
@@ -21,7 +22,15 @@ def get_locations(do=0):
 @cache
 def get_list_by_location(city):
     location_code = json_data['code'][city]
-    return find_by_code(location_code)
+    return find_by_code_to_json(location_code)
+
+
+# json 파일에서 코드명으로 해수욕장 이름 , 위경도 데이터 가져오기
+def find_by_code_to_json(codes):
+    result = list()
+    for code in codes:
+        result.append(json_beach_data[code])
+    return result
 
 
 # 해당 도 하위 시 데이터 모두 가져오기
@@ -63,5 +72,5 @@ def find_by_code(location_code):
     return results
 
 
-# if __name__ == "__main__":
-
+if __name__ == "__main__":
+    get_list_by_location("양양")

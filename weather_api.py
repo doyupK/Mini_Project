@@ -1,5 +1,6 @@
 import math
 from datetime import date, datetime, timedelta
+from functools import cache
 
 import requests
 
@@ -81,6 +82,7 @@ def get_weather_info(lat=38.005, lng=128.731):
 
 
 # 현재 시간 기준 5시간분 데이터
+@cache
 def until_current_time_info(lat=38.005, lng=128.731):
     page_no = '1'
     num_of_rows = '72'
@@ -129,6 +131,7 @@ def weather_filter_info(response, base_time, opt):
             # 시간에 따른 기상 데이터 리스트 append
             if not fcst_time == item['fcstTime']:
                 fcst_time = item['fcstTime']
+                print(weather_data)
                 all_time_data.append(weather_data)
                 weather_data = {}
 

@@ -1,10 +1,4 @@
 import hashlib
-
-from django.core.paginator import Paginator
-from pymongo import MongoClient
-import certifi
-from flask import Flask, render_template, request, jsonify
-
 from datetime import datetime, timedelta
 
 import certifi
@@ -14,8 +8,8 @@ from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 
 import data_resource
-
 from get_data import get_locations, get_list_by_location
+from weather_api import until_current_time_info
 
 ca = certifi.where()
 client = MongoClient('localhost', 27017)
@@ -40,12 +34,10 @@ def home():
         return render_template('index.html', login_status=login_status)
 
 
-
 # 지역별 페이지 이동
 @app.route('/location_lists/<location>')
 def location_lists(location):
     return render_template('location_list.html')
-
 
 
 # 도 하위 시별 리스트
@@ -61,6 +53,14 @@ def locations():
 def find_by_city():
     received_city = request.args.get("city")
     return jsonify(get_list_by_location(received_city))
+
+
+@app.route('/locations/detail/<location>/<lat>/<lng>')
+def location_detail(location, lat, lng):
+    result = until_current_time_info(lat, lng)
+    weathers = result['weather']
+    print(weathers)
+    return render_template('location_detail.html', beach=location, data=weathers[0], weathers=weathers)
 
 
 # fin 게시글 저장 - 220509 DY
@@ -298,6 +298,7 @@ def delete_comment():
 
     return jsonify({'msg': '삭제 완료!'})
 
+
 # Main Page 지역 TOP4 by JH
 
 @app.route("/review", methods=["GET"])
@@ -305,8 +306,6 @@ def commenst_get():
     all_reivew = list(db.fin_Reviews.find({}, {'_id': False}).limit(4))
 
     return jsonify({'review': all_reivew})
-
-
 
 
 if __name__ == '__main__':

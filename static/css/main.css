@@ -197,7 +197,7 @@ a {
 .post_size img:hover {
     transform: scale(1.2);
 }
-.card {
+.card:not(.location-card) {
     border: none;
     margin-top: 60px;
 }
