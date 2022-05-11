@@ -28,9 +28,7 @@
     <title>끌</title>
 
     <style>
-        .wrapper {
-            height: 800px;
-        }
+
     </style>
 
     <script>
@@ -102,7 +100,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/home")
+                        window.location.replace("/")
                     } else {
                         alert(response['msg'])
                     }
@@ -246,8 +244,8 @@
                         </li>
                     </ul>
                 </nav>
-                <a href="/home">
-                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
+                <a href="/">
+                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
                 </a>
                 <nav class="user_nav">
                     <ul>
@@ -342,53 +340,54 @@
                     </div>
                 </div>
                 <section id="main">
-                        <div class="main_content">
+                    <div class="main_content">
 
                         <div class="img_box">
                             <img class="Review_img" src="../static/img/{{review.file}}">
                         </div>
-                            <div class="review_detail">
-                                <div id="title">
-                                    <h5 id="postNum" style="display: none">{{ review.post_num }}</h5>
-                                    <h1>{{ review.spot_name }}</h1>
-                                    <h2>{{ review.location }}</h2>
-                                    <h4>{{ review.content }}</h4>
-                                    <br>
-                                    <h3 style="color: darkblue">
-                                        <a href="https://www.google.com/search?q={{review.spot_name}}"><span> 이 장소 구글 검색하기 ! </span></a></h3>
-                                </div>
-                                <!-- Comment 영역 -->
-                                <div class="comment_box">
-                                    {% if user_info is not none %}
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="commentUserName">{{ user_info.name }}</span>
-                                        <input type="text" class="form-control" placeholder="Comment Input"
-                                            aria-label="Comment Input" aria-describedby="button-addon2"
-                                            id="commentInput">
-                                        <button class="btn btn-outline-dark" type="button" id="button-addon2"
+                        <div class="review_detail">
+                            <div id="title">
+                                <h5 id="postNum" style="display: none">{{ review.post_num }}</h5>
+                                <h1>{{ review.spot_name }}</h1>
+                                <h2>{{ review.location }}</h2>
+                                <h4>{{ review.content }}</h4>
+                                <br>
+                                <h3 style="color: darkblue">
+                                    <a href="https://www.google.com/search?q={{review.spot_name}}"><span> 이 장소 구글 검색하기 ! </span></a>
+                                </h3>
+                            </div>
+                            <!-- Comment 영역 -->
+                            <div class="comment_box">
+                                {% if user_info is not none %}
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="commentUserName">{{ user_info.name }}</span>
+                                    <input type="text" class="form-control" placeholder="Comment Input"
+                                           aria-label="Comment Input" aria-describedby="button-addon2"
+                                           id="commentInput">
+                                    <button class="btn btn-outline-dark" type="button" id="button-addon2"
                                             onclick="save_comment()">
-                                            댓글 달기
-                                        </button>
-                                    </div>
-                                    {% endif %}
-                                    <div class="commentList">
-                                        {% for comment in comments %}
-                                        {% if comments[loop.index0].userID == user_info.id %}
-                                        <p class="comment_row"><span>{{comments[loop.index0].username}} :
+                                        댓글 달기
+                                    </button>
+                                </div>
+                                {% endif %}
+                                <div class="commentList">
+                                    {% for comment in comments %}
+                                    {% if comments[loop.index0].userID == user_info.id %}
+                                    <p class="comment_row"><span>{{comments[loop.index0].username}} :
                                                 {{comments[loop.index0].comment}}</span>
-                                            <button type="button" class="btn-close" aria-label="Close"
+                                        <button type="button" class="btn-close" aria-label="Close"
                                                 onclick="delete_comment({{comments[loop.index0].comment_id }})"></button>
-                                        </p>
-                                        {% else %}
-                                        <p class="comment_row"><span>{{comments[loop.index0].username}} :
+                                    </p>
+                                    {% else %}
+                                    <p class="comment_row"><span>{{comments[loop.index0].username}} :
                                                 {{comments[loop.index0].comment}}</span>
-                                        </p>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </div>
+                                    </p>
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </section>
 
             </div>
@@ -396,25 +395,25 @@
     </div>
 </div>
 <!-- footer -->
-    <footer id="footer">
-        <div id="footer_info">
-            <div class="foot_container">
-                <div class="row">
-                    <div class="footer_info">
-                        <h2>
-                            <img src="../static/img/logo2.png">
-                        </h2>
-                        <ul>
-                            <li>4조</li>
-                            <li>이정찬</li>
-                            <li>임정현</li>
-                            <li>김도엽</li>
-                        </ul>
-                    </div>
+<footer id="footer">
+    <div id="footer_info">
+        <div class="foot_container">
+            <div class="row">
+                <div class="footer_info">
+                    <h2>
+                        <img src="../static/img/logo.png">
+                    </h2>
+                    <ul>
+                        <li>4조</li>
+                        <li>이정찬</li>
+                        <li>임정현</li>
+                        <li>김도엽</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 </body>
 <script>
     function save_comment() {
