@@ -1,0 +1,110 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*header*/
+
+.header {
+    position: absolute;
+    width: 95%;
+    height: 75px;
+    margin: 10px;
+    padding: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'PT Serif', serif;
+}
+
+.logo {
+    width: 190px;
+}
+/* 로고 이미지 추가 -- */
+.nav {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    font-size: 17px;
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
+.nav-text {
+    padding: 15px;
+    cursor: pointer;
+}
+
+.nav-text a {
+    text-decoration: none;
+    color: black;
+    align-items: center;
+}
+
+.nav-text a:hover {
+    color: black;
+    opacity: 0.3;
+}
+
+/*container*/
+.main_text {
+    position: absolute;
+    left:50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    color: white;
+    text-align: center;
+    font-family: 'PT Serif', serif;
+}
+
+.main_text h2 {
+    font-size: 45px;
+    margin-bottom: 20px;
+}
+
+.main_text h4 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    font-family: 'Gowun Dodum', sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+
+}
+
+.main_text p {
+    font-size: 28px;
+    color: black;
+    font-weight:700;
+    opacity:0.5;
+}
+
+.main_text > button {
+    margin-top: 10px;
+    color: white;
+    background: none;
+    font-size: 18px;
+    border: 1.9px solid white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    outline: none;
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.main_text > button:hover {
+    /* background-color: #760c0c; */
+    opacity: 0.7;
+    border-color:black;
+    color: black;
+    font-weight: bold;
+    transform: scale(1.1, 1.1);
+}
+
+#background {
+  z-index: -1;
+    height: auto;
+}

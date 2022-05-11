@@ -12,14 +12,20 @@ from get_data import get_locations, get_list_by_location
 gmap = data_resource.gmap
 
 ca = certifi.where()
-client = MongoClient('localhost', 27017)
-db = client.sparta_1week
+
+client = data_resource.client
+db = client.dbsparta
 app = Flask(__name__)
+
 
 hash_key = data_resource.SECRET_KEY
 
-
 @app.route('/')
+def intro():
+    return render_template('intro.html')
+
+
+@app.route('/home')
 def home():
     token_receive = request.cookies.get('mytoken')
 
