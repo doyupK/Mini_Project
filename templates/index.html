@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!--    title Icon -->
+    <!--    title Icon -->
     <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
 
     <meta charset="UTF-8">
@@ -35,7 +35,8 @@
           rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap"
+          rel="stylesheet">
 
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
@@ -184,6 +185,7 @@
             goLocationListsPage()
         })
     </script>
+    <link rel="stylesheet" href="main_prac.css">
 </head>
 <body>
 <!--                Login & sign Up Modal-->
@@ -334,9 +336,9 @@
                                    data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
                         {% elif login_status == 1 %}
-                        <li class="nav-text"><a>{{user_info.name}} 님</a></li>
-                        <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
-                            로그아웃</a></li>
+                            <li class="nav-text"><a>{{ user_info.name }} 님</a></li>
+                            <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
+                                로그아웃</a></li>
                         {% endif %}
                     </ul>
 
@@ -428,53 +430,45 @@
                 </div>
                 <div id="rank" class="area_md">
                     {% for top_reveiw in top_reveiws %}
-                    <div class="area_col">
-                        <div class="post_size">
-                            <div class="col">
-                                <div class="card h-80">
-                                    <div>
-                                        <img class="card-img-top" src="static/img/{{top_reveiw.file}}"
-                                             onclick="goDetail( '{{ top_reveiw.post_num }}' )">
-                                    </div>
-                                    <div>
-                                        <div class="card-body card_contents">
-                                            <h4><p class="card-profile_name">{{ top_reveiw.spot_name }}</p></h4>
-                                            <p class="card-text">{{ top_reveiw.spot_name }}</p>
-                                            <p class="card-text">{{ top_reveiw.location }}</p>
-                                            <p class="card-text">{{ top_reveiw.content }}</p>
-                                        </div>
-                                    </div>
+                        <div class="area_col">
+                            <div class="card h-100">
+                                <img src="static/img/{{ top_reveiw.file }}" class="card-img-top" alt="..."
+                                     onclick="goDetail( '{{ top_reveiw.post_num }}' )">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>{{ top_reveiw.spot_name }}</b></h5>
+                                    <p class="card-text">{{ top_reveiw.location }}</p>
+                                    <p class="card-text">{{ top_reveiw.content }}</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
                     {% endfor %}
 
-                </div>
-
             </div>
+
         </div>
     </div>
 </div>
+</div>
 <!-- footer -->
-    <footer id="footer">
-        <div id="footer_info">
-            <div class="foot_container">
-                <div class="row">
-                    <div class="footer_info">
-                        <h2>
-                            <img src="../static/img/logo2.png" alt="FIN_logo">
-                        </h2>
-                        <ul>
-                            <li>4조</li>
-                            <li>이정찬</li>
-                            <li>임정현</li>
-                            <li>김도엽</li>
-                        </ul>
-                    </div>
+<footer id="footer">
+    <div id="footer_info">
+        <div class="foot_container">
+            <div class="row">
+                <div class="footer_info">
+                    <h2>
+                        <img src="../static/img/logo2.png" alt="FIN_logo">
+                    </h2>
+                    <ul>
+                        <li>4조</li>
+                        <li>이정찬</li>
+                        <li>임정현</li>
+                        <li>김도엽</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 </body>
 </html>

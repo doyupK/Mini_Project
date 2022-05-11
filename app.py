@@ -1,4 +1,5 @@
 import hashlib
+from datetime import datetime, timedelta
 
 from django.core.paginator import Paginator
 from pymongo import MongoClient
@@ -16,9 +17,8 @@ from weather_api import get_weather_info, until_current_time_info
 gmap = data_resource.gmap
 
 ca = certifi.where()
-
 client = data_resource.client
-db = client.sparta_1week
+db = client.dbsparta
 app = Flask(__name__)
 
 hash_key = data_resource.SECRET_KEY
@@ -119,7 +119,7 @@ def save_posts():
         'time': today.strftime('%Y.%m.%d'),
         'COMMENT': []
     }
-
+    # collection에 저장
     db.fin_Reviews.insert_one(doc)
 
     return jsonify({'msg': '저장 완료!'})

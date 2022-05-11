@@ -103,6 +103,7 @@ li {
 
 .area_top {
     text-align: center;
+    margin-top: 80px;
     width: 50%;
     height: 800px;
     float: left;
