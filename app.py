@@ -1,4 +1,10 @@
 import hashlib
+
+from django.core.paginator import Paginator
+from pymongo import MongoClient
+import certifi
+from flask import Flask, render_template, request, jsonify
+
 from datetime import datetime, timedelta
 
 import certifi
@@ -8,12 +14,14 @@ from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 
 import data_resource
+
 from get_data import get_locations, get_list_by_location
 
 ca = certifi.where()
 client = MongoClient('localhost', 27017)
 db = client.sparta_1week
 app = Flask(__name__)
+
 hash_key = data_resource.SECRET_KEY
 
 
@@ -32,10 +40,12 @@ def home():
         return render_template('index.html', login_status=login_status)
 
 
+
 # 지역별 페이지 이동
 @app.route('/location_lists/<location>')
 def location_lists(location):
     return render_template('location_list.html')
+
 
 
 # 도 하위 시별 리스트
@@ -287,6 +297,16 @@ def delete_comment():
                                    {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
+
+# Main Page 지역 TOP4 by JH
+
+@app.route("/review", methods=["GET"])
+def commenst_get():
+    all_reivew = list(db.fin_Reviews.find({}, {'_id': False}).limit(4))
+
+    return jsonify({'review': all_reivew})
+
+
 
 
 if __name__ == '__main__':
