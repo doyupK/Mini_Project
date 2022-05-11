@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--    title Icon -->
+    <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +30,14 @@
 
     <title>끌</title>
 
+    <!--    font-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap"
+          rel="stylesheet">
+
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
     <!--    Sign Up 스크립트 불러오기   -->
@@ -36,7 +45,6 @@
 
 
     <style>
-
 
         #do-name {
             height: 100px;
@@ -54,7 +62,7 @@
 
     </style>
     <script>
-         function goLocationListsPage() {
+        function goLocationListsPage() {
             let lands = document.getElementsByClassName('land');
             [...lands].forEach((land, idx) => {
                 land.addEventListener('mouseover', (e) => {
@@ -160,7 +168,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/")
+                        window.location.replace("/home")
                     } else {
                         alert(response['msg'])
                     }
@@ -177,6 +185,7 @@
             goLocationListsPage()
         })
     </script>
+    <link rel="stylesheet" href="main_prac.css">
 </head>
 <body>
 <!--                Login & sign Up Modal-->
@@ -310,30 +319,26 @@
                         </li>
                     </ul>
                 </nav>
-                <a href="/">
-                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
+                <a href="/home">
+                    <img src="../static/img/logo2.png" alt="FIN_logo">
                 </a>
                 <nav class="user_nav">
                     <ul>
                         {% if login_status == 0 %}
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-regular fa-user"></i>로그인
                                 </a>
                             </li>
-                        </strong>
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
-                        </strong>
                         {% elif login_status == 1 %}
-                        <li class="nav-text"><a>{{user_info.name}} 님</a></li>
-                        <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
-                            로그아웃</a></li>
+                            <li class="nav-text"><a>{{ user_info.name }} 님</a></li>
+                            <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
+                                로그아웃</a></li>
                         {% endif %}
                     </ul>
 
@@ -380,7 +385,7 @@
                     <!--{id:"KR-11"},{id:"KR-26"},{id:"KR-27"},{id:"KR-28"},{id:"KR-29"},{id:"KR-30"},{id:"KR-31"},{id:"KR-41"},{id:"KR-42"},{id:"KR-43"},{id:"KR-44"},{id:"KR-45"},{id:"KR-46"},{id:"KR-47"},{id:"KR-48"},{id:"KR-49"},{id:"KR-50"}-->
 
                 </defs>
-                 <g>
+                <g>
                     <path id="KR-11" title="서울" class="enabled"
                           d="M133.184,290.751L133.184,290.751L136.984,294.568L137.744,299.961L138.871,300.389L141.281,299.139L144.374,304.958L146.181,304.235L149.772,304.629L153.939,302.327L157.004,302.032L157.686,304.958L161.329,302.886L164.315,302.624L165.994,301.047L165.967,299.896L167.225,299.6L168.509,297.89L167.33,296.804L167.723,294.305L170.918,292.166L169.478,288.611L164.683,290.784L163.136,290.356L164.551,285.022L162.481,280.312L162.375,275.796L160.281,274.511L155.328,274.313L153.152,275.83L151.527,278.599L151.45,281.597L150.348,282.388L145.212,282.783L143.588,287.295L139.971,288.907L134.913,285.714L132.739,289.171L132.739,289.171z"/>
 
@@ -426,33 +431,25 @@
                 </div>
                 <div id="rank" class="area_md">
                     {% for top_reveiw in top_reveiws %}
-                    <div class="area_col">
-                        <div class="post_size">
-                            <div class="col">
-                                <div class="card h-80">
-                                    <div>
-                                        <img class="card-img-top" src="static/img/{{top_reveiw.file}}"
-                                             onclick="goDetail( '{{ top_reveiw.post_num }}' )">
-                                    </div>
-                                    <div>
-                                        <div class="card-body card_contents">
-                                            <h4><p class="card-profile_name">{{ top_reveiw.spot_name }}</p></h4>
-                                            <p class="card-text">{{ top_reveiw.spot_name }}</p>
-                                            <p class="card-text">{{ top_reveiw.location }}</p>
-                                            <p class="card-text">{{ top_reveiw.content }}</p>
-                                        </div>
-                                    </div>
+                        <div class="area_col">
+                            <div class="card h-100">
+                                <img src="static/img/{{ top_reveiw.file }}" class="card-img-top" alt="..."
+                                     onclick="goDetail( '{{ top_reveiw.post_num }}' )">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>{{ top_reveiw.spot_name }}</b></h5>
+                                    <p class="card-text">{{ top_reveiw.location }}</p>
+                                    <p class="card-text">{{ top_reveiw.content }}</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                </div>
                     {% endfor %}
 
-                </div>
-
             </div>
+
         </div>
     </div>
+</div>
 </div>
 <!-- footer -->
 <footer id="footer">
@@ -461,7 +458,7 @@
             <div class="row">
                 <div class="footer_info">
                     <h2>
-                        <img src="../static/img/logo2.png">
+                        <img src="../static/img/logo2.png" alt="FIN_logo">
                     </h2>
                     <ul>
                         <li>4조</li>
