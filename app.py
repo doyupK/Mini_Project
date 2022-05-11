@@ -1,10 +1,4 @@
 import hashlib
-
-from django.core.paginator import Paginator
-from pymongo import MongoClient
-import certifi
-from flask import Flask, render_template, request, jsonify
-
 from datetime import datetime, timedelta
 
 import certifi
@@ -28,16 +22,18 @@ hash_key = data_resource.SECRET_KEY
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
+    top_reveiws = list(db.fin_Reviews.find({}, {'_id ': False}).sort('COMMENT', -1).limit(4))
 
     if token_receive is not None:
         payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
         user_info = db.fin_users.find_one({"id": payload["id"]})
         login_status = 1
         return render_template('index.html', user_info=user_info,
-                               login_status=login_status)
+                               login_status=login_status, top_reveiws=top_reveiws)
     else:
         login_status = 0
-        return render_template('index.html', login_status=login_status)
+        return render_template('index.html', login_status=login_status, top_reveiws=top_reveiws)
+
 
 
 
@@ -297,15 +293,6 @@ def delete_comment():
                                    {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
-
-# Main Page 지역 TOP4 by JH
-
-@app.route("/review", methods=["GET"])
-def commenst_get():
-    all_reivew = list(db.fin_Reviews.find({}, {'_id': False}).limit(4))
-
-    return jsonify({'review': all_reivew})
-
 
 
 
