@@ -28,7 +28,9 @@
     <title>끌</title>
 
     <style>
-
+        .wrapper {
+            height: 800px;
+        }
     </style>
 
     <script>
@@ -100,7 +102,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/")
+                        window.location.replace("/home")
                     } else {
                         alert(response['msg'])
                     }
@@ -244,8 +246,8 @@
                         </li>
                     </ul>
                 </nav>
-                <a href="/">
-                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
+                <a href="/home">
+                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
                 </a>
                 <nav class="user_nav">
                     <ul>
@@ -400,7 +402,7 @@
                 <div class="row">
                     <div class="footer_info">
                         <h2>
-                            <img src="../static/img/logo.png">
+                            <img src="../static/img/logo2.png">
                         </h2>
                         <ul>
                             <li>4조</li>
