@@ -1,31 +1,23 @@
 import hashlib
-from django.core.paginator import Paginator
-from pymongo import MongoClient
-import certifi
-from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
+
+import certifi
 import jwt as jwt
-import googlemaps
+from django.core.paginator import Paginator
+from flask import Flask, render_template, request, jsonify
+from pymongo import MongoClient
+
 import data_resource
 from get_data import get_locations, get_list_by_location
 
-gmap = data_resource.gmap
-
 ca = certifi.where()
-
-client = data_resource.client
-db = client.dbsparta
+client = MongoClient('localhost', 27017)
+db = client.sparta_1week
 app = Flask(__name__)
-
-
 hash_key = data_resource.SECRET_KEY
 
+
 @app.route('/')
-def intro():
-    return render_template('intro.html')
-
-
-@app.route('/home')
 def home():
     token_receive = request.cookies.get('mytoken')
 
@@ -40,11 +32,18 @@ def home():
         return render_template('index.html', login_status=login_status)
 
 
+# 지역별 페이지 이동
+@app.route('/location_lists/<location>')
+def location_lists(location):
+    return render_template('location_list.html')
+
+
 # 도 하위 시별 리스트
 @app.route('/city_lists')
 def locations():
     select_do = request.args.get("do")
-    return jsonify(get_locations(select_do))
+    print(select_do)
+    return jsonify(get_locations(int(select_do)))
 
 
 # 도에 해당 하는 지역 리스트 반환
@@ -72,10 +71,6 @@ def save_posts():
 
     location_receive = request.form['location_give']
     name_receive = request.form['name_give']
-    # 주소 -> 위/경도 변환
-    result = gmap.geocode(name_receive)
-    n_lat = result[0]['geometry']['location']['lat']
-    n_lng = result[0]['geometry']['location']['lng']
     content_receive = request.form['content_give']
 
     file = request.files["file_give"]
@@ -98,13 +93,11 @@ def save_posts():
         'location': location_receive,
         'spot_name': name_receive,
         'content': content_receive,
-        'lat': n_lat,
-        'lng': n_lng,
         'file': f'{filename}.{extension}',
         'time': today.strftime('%Y.%m.%d'),
         'COMMENT': []
     }
-
+    # collection에 저장
     db.fin_Reviews.insert_one(doc)
 
     return jsonify({'msg': '저장 완료!'})
@@ -160,6 +153,7 @@ def sign_in():
             'id': id_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
+
         token = jwt.encode(payload, hash_key,
                            algorithm='HS256')  # .decode('utf8')
         # .decode('utf8')  # 토큰을 건내줌.
@@ -290,7 +284,7 @@ def delete_comment():
     # post Number 찾아서 해당 게시글 DB 정보에서 삭제
     if pageInfo_receive == "fin":
         db.fin_Reviews.update_many({'post_num': postNum_receive},
-                               {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
+                                   {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
 

@@ -1,76 +1,274 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
+    <meta property="og:title" content="끌"/>
+    <meta property="og:description" content="서퍼들을 위한 해변 실시간 영상을 제공합니다."/>
+    <meta property="og:image" content="이미지 삽입"/>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Serif+KR:wght@500&display=swap"
+
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
           rel="stylesheet">
-    <style>
-        html, body {
-            background-color: darkcyan;
-            font-family: 'Jua', sans-serif;
-            font-family: 'Noto Serif KR', serif;
-        }
 
-        header {
-            box-shadow: 4px 4px 4px;
-        }
+    <!-- fontawesome DY-->
+    <script src="https://kit.fontawesome.com/8f4978e361.js" crossorigin="anonymous"></script>
 
-        main {
-            margin-top: 3%;
-        }
-
-        .select-location {
-            color: black;
-        }
-
-        .card {
-            box-shadow: 4px 4px 4px;
-
-        }
-
-        .card:hover {
-            box-shadow: 10px 10px 10px;
-        }
-
-
-    </style>
-
-    <title>끌[FIN]</title>
+    <!--    JS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <script src="http://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../static/js/location_list.js"></script>
 
+    <title>끌</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
+    <!--    Sign Up 스크립트 불러오기   -->
+    <script src="../static/js/signup.js"></script>
+
+
+    <script>
+        function logout() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!');
+            window.location.href = "/";
+        }
+
+        function login() {
+            let username = $("#floatingInputID").val()
+            let password = $("#floatingInputPW").val()
+
+            if (username == "") {
+                alert('아이디를 입력해주세요.')
+                $("#floatingInput_id").focus()
+                return;
+            } else {
+                $("#floatingInput_id").text("")
+            }
+
+            if (password == "") {
+                alert('비밀번호를 입력해주세요.')
+                $("#floatingInput_PW").focus()
+                return;
+            } else {
+                $("#floatingInput_PW").text("")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    give_id: username,
+                    give_pw: password
+                },
+                success: function (response) {
+                    console.log('성공')
+                    if (response['result'] == 'success') {
+                        $.cookie('mytoken', response['token'], {path: '/'});
+                        alert(response['msg'])
+                        window.location.replace("/")
+                    } else {
+                        alert(response['msg'])
+                    }
+                }
+            });
+        }
+
+
+    </script>
 </head>
 <body>
-<header class="site-header sticky-top">
-    <nav class="navbar navbar-light bg-light p-0">
-        <div class="container-fluid">
-            <a class="navbar-brand mb-0 mt-0" href="/"><img src="../static/img/logo.png" height="50vh"></a>
-            <button class="btn btn-outline-dark" type="submit">로그인</button>
+<!--                Login & sign Up Modal-->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">
+                    로그인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="floatingInputID"
+                                   placeholder="Type">
+                            <label for="floatingInputID">ID</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingInputPW"
+                                   placeholder="Name">
+                            <label for="floatingInputPW">Password</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="signup_modal">
+                <button type="button" class="btn btn-secondary posting-btn-close"
+                        data-bs-dismiss="modal">
+                    취소
+                </button>
+                <button onclick="login()" type="button" class="btn btn-primary posting-btn-save">
+                    로그인
+                </button>
+            </div>
         </div>
-    </nav>
+    </div>
+</div>
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signUpModalLabel">
+                    회원 가입</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <div class="input_data form-floating">
+                            <input type="text" class="form-control" id="floatingInput_ID"
+                                   placeholder="ID"
+                                   maxlength="12"
+                                   onkeyup="checkId(this.value)">
+                            <label for="floatingInput_ID">ID : 4~12자리 영문,숫자만 가능</label>
+                            <button onclick="users_idCheck()" type="button" class="btn btn-dark">중복확인
+                            </button>
+                        </div>
+                        <label for="floatingInput_ID" id="checkIdResult"></label>
+                        <div class="input_data mb-3">
+                            <div class="input_data mb-3">
+                                <input type="password" class="form-control" id="floatingInput_PW"
+                                       placeholder="Password"
+                                       onkeyup="checkPassword(this.value)" maxlength="16">
+                                <label for="floatingInput_PW">Password : 8~16자리 영문자,숫자,특수문자 조합</label>
+                            </div>
+                            <label for="floatingInput_PW" id="checkPasswordResult"></label>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data mb-3">
+                                <input type="password" class="form-control" id="floatingInput_PW_Check"
+                                       placeholder="Password Check"
+                                       onkeyup="checkPasswordConfirm(this.value)" maxlength="16">
+                                <label for="floatingInput_PW_Check">Password Check</label>
+                            </div>
+                            <label for="floatingInput_PW_Check" id="passwordConfirmResult"></label>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data form-floating">
+                                <input type="text" class="form-control" id="floatingInput_name"
+                                       placeholder="name"
+                                       maxlength="20">
+                                <label for="floatingInput_name">name</label>
+                            </div>
+                        </div>
+                        <div class="input_data mb-3">
+                            <div class="input_data form-floating">
+                                <input type="text" class="form-control" id="floatingInput_keyword"
+                                       placeholder="findKeyword"
+                                       maxlength="20">
+                                <label for="floatingInput_name">비밀번호 찾기 키워드</label>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+
+                        </div>
+                        <div class="form-floating mb-3">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" id="login_modal">
+                <button type="button" class="btn btn-secondary posting-btn-close"
+                        data-bs-dismiss="modal">
+                    취소
+                </button>
+                <button onclick="users_signUp()" type="button" class="btn btn-primary posting-btn-save">
+                    회원가입
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="header">
+                <nav class="title_bar">
+                    <ul>
+                        <li class="nav-text">
+                            <a href="">파도정보</a>
+                        </li>
+                        <li class="nav-text">
+                            <a href="/FIN_list">게시판</a>
+                        </li>
+                    </ul>
+                </nav>
+                <a href="/">
+                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
+                </a>
+                <nav class="user_nav">
+                    <ul>
+                        {% if login_status == 0 %}
+                        <strong>
+                            <li class="nav-text">
+                                <a type="button" data-bs-toggle="modal"
+                                   data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
+                                    <i class="fa-regular fa-user"></i>로그인
+                                </a>
+                            </li>
+                        </strong>
+                        <strong>
+                            <li class="nav-text">
+                                <a type="button" data-bs-toggle="modal"
+                                   data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
+                                    <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
+                        </strong>
+                        {% elif login_status == 1 %}
+                        <li class="nav-text"><a>{{user_info.name}} 님</a></li>
+                        <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
+                            로그아웃</a></li>
+                        {% endif %}
+                    </ul>
+
+                </nav>
+
+            </div>
+        </div>
+    </div>
 </header>
 <main>
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
-                <ul class="nav nav-tabs" id="box-tabs" style="width: 70vw;"></ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content w-100" id="box-contents" style="width: 70vw; padding-top:35px;">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-lg-4">
+                        <div class="card" style="width: 18rem; border-color: #666666">
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the
+                                    bulk of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-lg-4"></div>
+                    <div class="col-md-4 col-sm-4 col-lg-4"></div>
                 </div>
-
-
             </div>
-            <div class="col-md-4" style="margin-top: -7%; padding-left: 4%">
+            <div class="col-md-3" style="margin-top: -7%; padding-left: 4%">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
                      width="550" height="800">
                     <defs>
@@ -136,130 +334,25 @@
     </div>
 </main>
 
-
-<script>
-    function viewPhoto(photo) {
-        if (!photo.files) return;
-        var reader = new FileReader();
-        reader.onload = function (event) {
-            var src = event.target.result;
-            var img = document.querySelector("#preview");
-            img.src = src;
-            img.style.display = "block";
-        }
-        reader.readAsDataURL(photo.files[0]);
-    }
-
-    let slide = $("#slider > div");
-    let lastSlideNo = slide.length - 1;
-    let sno = 0;
-    $(".slide-btn").on("click", function (event) {
-        event.preventDefault();
-        let dir = $(this).attr("data-dir");
-        playSlider(dir);
-    });
-
-    function playSlider(dir) {
-        let target_top, target_left, init_top, init_left;
-        if ($(slide[sno]).is(":animated")) return;
-        if (dir == "right") {
-            target_top = "0";
-            target_left = "100%";
-            init_top = "0";
-            init_left = "-100%";
-        } else if (dir == "left") {
-            target_top = "0";
-            target_left = "-100%";
-            init_top = "0";
-            init_left = "100%";
-        } else if (dir == "up") {
-            target_top = "-100%";
-            target_left = "0";
-            init_top = "100%";
-            init_left = "0";
-        } else if (dir == "down") {
-            target_top = "100%";
-            target_left = "0";
-            init_top = "-100%";
-            init_left = "0";
-        } else {
-            return;
-        }
-
-        $(slide[sno]).siblings("div").css({top: init_top, left: init_left});
-
-        $(slide[sno]).animate({top: target_top, left: target_left}, 1000, function () {
-            $(this).css({top: init_top, left: init_left});
-        });
-
-        sno++; //sno = sno + 1;
-        if (sno > lastSlideNo) sno = 0;
-        $(slide[sno]).animate({left: 0, top: 0}, 1000);
-    }
-
-    //JS 데이터 형식
-    var a = "Hello";
-    var b = 100;
-    var c = [2, 5, 7, 8];
-    var d = ["red", "green", "blue"]; //배열
-    d.push("yellow"); //배열에 값 추가
-    var e = {}; //객체(Object)
-    e.name = "홍길동";
-    e.age = 20;
-    var f = {name: "동일인", grade: 2, phone: "010-1234-5678"};
-    f.info = function () {
-        //method = 객체 안에 포함된 함수
-        console.log(this.name + this.grade + this.phone);
-    }
-    //JSON: JavaScript Object Notation, 자바스크립트 객체 표기법
-    var people = [{name: "동일인", grade: 2}, {name: "홍길동", grade: 3}];
-
-    var a = 1; // var로 선언한 변수 등은 덮어쓰기(overwrite) 가능
-    let aa = 1;
-    //let aa = 2;  //중복선언 오류, 덮어쓰기(overwrite) 불가능
-
-    //함수
-    function myfunc() {
-    }
-
-    var myfunc2 = function () {
-    }
-    //arrow function
-    let sum = 0;
-    const sumOfNum = (v) => {
-        for (let i = 1; i <= v; i++) sum += i;
-    }
-    sumOfNum(100);
-    console.log(sum);
-
-    var korea = {};
-    $.getJSON("assets/korea.json", function (json) {
-        korea = json;
-        //console.log(korea);
-    });
-
-    $(".land").on("click", function () {
-        var id = $(this).attr("id");
-        //alert(id);
-        if (!id) return;
-        var cities = korea.korea.city;
-        var city = getCityById(cities, id);
-        if (city.length > 0) {
-            var cityinfo = city[0];
-            $("#name_ko").text(cityinfo.name_ko);
-            $("#name_full").text(cityinfo.name_full);
-            $("#info").text(cityinfo.info);
-        }
-    });
-
-    function getCityById(data, id) {
-        return data.filter(
-            function (data) {
-                return data.id == id
-            }
-        );
-    }
-</script>
-
+<!-- footer -->
+<footer id="footer">
+    <div id="footer_info">
+        <div class="foot_container">
+            <div class="row">
+                <div class="footer_info">
+                    <h2>
+                        <img src="../static/img/logo.png">
+                    </h2>
+                    <ul>
+                        <li>4조</li>
+                        <li>이정찬</li>
+                        <li>임정현</li>
+                        <li>김도엽</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
