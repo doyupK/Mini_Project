@@ -20,11 +20,12 @@ app = Flask(__name__)
 
 hash_key = data_resource.SECRET_KEY
 
+# Intro Page 진입 by DY
 @app.route('/')
 def intro():
     return render_template('intro.html')
 
-
+# Index Page 진입 by DY
 @app.route('/home')
 def home():
     token_receive = request.cookies.get('mytoken')

@@ -5,50 +5,6 @@
     box-sizing: border-box;
 }
 
-/*header*/
-
-.header {
-    position: absolute;
-    width: 95%;
-    height: 75px;
-    margin: 10px;
-    padding: 50px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'PT Serif', serif;
-}
-
-.logo {
-    width: 190px;
-}
-/* 로고 이미지 추가 -- */
-.nav {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    font-size: 17px;
-    font-family: 'Gowun Dodum', sans-serif;
-}
-
-.nav-text {
-    padding: 15px;
-    cursor: pointer;
-}
-
-.nav-text a {
-    text-decoration: none;
-    color: black;
-    align-items: center;
-}
-
-.nav-text a:hover {
-    color: black;
-    opacity: 0.3;
-}
-
 /*container*/
 .main_text {
     position: absolute;
@@ -72,15 +28,13 @@
     font-family: 'Gowun Dodum', sans-serif;
     color: rgba(255, 255, 255, 0.8);
     opacity: 0;
-
+}
+.main_text span {
+    font-size: 45px;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
-.main_text p {
-    font-size: 28px;
-    color: black;
-    font-weight:700;
-    opacity:0.5;
-}
 
 .main_text > button {
     margin-top: 10px;
@@ -96,7 +50,6 @@
 }
 
 .main_text > button:hover {
-    /* background-color: #760c0c; */
     opacity: 0.7;
     border-color:black;
     color: black;

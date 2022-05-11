@@ -10,8 +10,11 @@
             crossorigin="anonymous"></script>
 
     <!-- 웹 폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap" rel="stylesheet">
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
     <link rel="stylesheet" href="../static/css/re_detail.css">
@@ -40,6 +43,7 @@
             window.location.href = "/";
         }
 
+        //게시글 저장
         function saving() {
             /*input 데이터 가져오기*/
             let location = $("#floatingInputLocation").val();
@@ -69,7 +73,7 @@
                 },
             });
         }
-
+        //로그인
         function login() {
             let username = $("#floatingInputID").val()
             let password = $("#floatingInputPW").val()
@@ -115,7 +119,7 @@
 
 </head>
 <body>
-<!--                Login & sign Up Modal-->
+<!--Login & sign Up Modal-->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -232,6 +236,8 @@
         </div>
     </div>
 </div>
+
+<!--header-->
 <header id="header">
     <div class="container">
         <div class="row">
@@ -280,7 +286,7 @@
     </div>
 </header>
 
-
+<!--본문-->
 <div class="wrapper">
     <div class="container">
         <div class="row">
@@ -395,28 +401,30 @@
         </div>
     </div>
 </div>
+
 <!-- footer -->
-    <footer id="footer">
-        <div id="footer_info">
-            <div class="foot_container">
-                <div class="row">
-                    <div class="footer_info">
-                        <h2>
-                            <img src="../static/img/logo2.png">
-                        </h2>
-                        <ul>
-                            <li>4조</li>
-                            <li>이정찬</li>
-                            <li>임정현</li>
-                            <li>김도엽</li>
-                        </ul>
-                    </div>
+<footer id="footer">
+    <div id="footer_info">
+        <div class="foot_container">
+            <div class="row">
+                <div class="footer_info">
+                    <h2>
+                        <img src="../static/img/logo2.png">
+                    </h2>
+                    <ul>
+                        <li>4조</li>
+                        <li>이정찬</li>
+                        <li>임정현</li>
+                        <li>김도엽</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 </body>
 <script>
+<!--    Comment 저장-->
     function save_comment() {
         let pageInfo = "fin"
         let postNum = $('#postNum').text()
@@ -443,7 +451,7 @@
         });
 
     }
-
+    //Comment 삭제
     function delete_comment(delete_id) {
         let res = confirm('삭제할까요?')
         if (res == true) {
