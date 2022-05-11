@@ -18,7 +18,7 @@ gmap = data_resource.gmap
 ca = certifi.where()
 
 client = data_resource.client
-db = client.dbsparta
+db = client.sparta_1week
 app = Flask(__name__)
 
 hash_key = data_resource.SECRET_KEY
