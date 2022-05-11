@@ -98,7 +98,7 @@
                 url: '/review',
                 data: {},
                 success: function (response) {
-                    let row = response
+                    let row = response['review']
                     for (let i = 0; i < row.length; i++) {
                         let location = row[i]['location']
                         let sopt = row[i]['spot_name']
@@ -107,17 +107,15 @@
 
                         let temp_html = ` <div class="area_col">
                                             <div class="card h-100">
-                                                <img src="${file}}" class="card-img-top" alt="...">
+                                                <img src="static/img/${file}" class="card-img-top" alt="...">
                                                 <div class="card-body">
                                                     <h5 class="card-title"><b>${location}</b></h5>
                                                     <p class="card-text">${sopt}</p>
                                                     <p class="card-text">${content}</p>
-                                                    <sub>공개 출처: 해양 수산부</sub>
                                                 </div>
                                             </div>
                                         </div>
                         `
-                        console.log(temp_html)
                         $('#rank').append(temp_html)
                     }
 
@@ -366,54 +364,6 @@
                     <p>지역 TOP</p>
                 </div>
                 <div id="rank" class="area_md" >
-<!--                    <div class="area_col">-->
-<!--                        <div class="card h-100">-->
-<!--                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title"><b>태안 진하 해변</b></h5>-->
-<!--                                <p class="card-text"></p>-->
-<!--                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>-->
-<!--                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>-->
-<!--                                <sub>공개 출처: 해양 수산부</sub>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="area_col ">-->
-<!--                        <div class="card h-100">-->
-<!--                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title"><b>태안 진하 해변</b></h5>-->
-<!--                                <p class="card-text"></p>-->
-<!--                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>-->
-<!--                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>-->
-<!--                                <sub>공개 출처: 해양 수산부</sub>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="area_col ">-->
-<!--                        <div class="card h-100">-->
-<!--                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title"><b>태안 진하 해변</b></h5>-->
-<!--                                <p class="card-text"></p>-->
-<!--                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>-->
-<!--                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>-->
-<!--                                <sub>공개 출처: 해양 수산부</sub>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="area_col ">-->
-<!--                        <div class="card h-100">-->
-<!--                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">-->
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title"><b>태안 진하 해변</b></h5>-->
-<!--                                <p class="card-text"></p>-->
-<!--                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>-->
-<!--                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>-->
-<!--                                <sub>공개 출처: 해양 수산부</sub>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
                 </div>
 
             </div>
