@@ -1,5 +1,6 @@
 import math
 from datetime import date, datetime, timedelta
+from functools import lru_cache
 
 import requests
 
@@ -13,6 +14,7 @@ service_key = data_resource.weather_key
 # opt 0: today, today_date, base_date, base_time
 # opt 1: base_time(현재 시간 기준 최신 갱신 시간)
 # opt 2: all_time(현재 시간 기준 회신 갱신 시간 포함 이전 시간)
+@lru_cache
 def get_current_base_time(opt=1):
     # 오늘
     today = datetime.today()  # 현재 지역 날짜 반환
@@ -50,11 +52,11 @@ def get_current_base_time(opt=1):
 
 # 온도,습도,강수량,습도,풍속 데이터
 # 현재 시간 데이터 요청
-def get_weather_info(lat=38.005, lng=128.731):
+@lru_cache
+def get_weather_info(lat, lng):
     page_no = '1'
     num_of_rows = '12'
     data_type = 'JSON'
-
     nx, ny = grid(lat, lng)
     today, today_date, base_date, base_time = get_current_base_time(0)
 
@@ -71,7 +73,7 @@ def get_weather_info(lat=38.005, lng=128.731):
     }
     try:
         response = requests.get(url, params=params)
-
+        print(response)
         state_code = response.json().get('response').get('header').get('resultCode')
         CheckErr(state_code)
     except ApiException as e:
@@ -81,7 +83,8 @@ def get_weather_info(lat=38.005, lng=128.731):
 
 
 # 현재 시간 기준 5시간분 데이터
-def until_current_time_info(lat=38.005, lng=128.731):
+@lru_cache
+def until_current_time_info(lat, lng):
     page_no = '1'
     num_of_rows = '72'
     data_type = 'JSON'
@@ -102,6 +105,7 @@ def until_current_time_info(lat=38.005, lng=128.731):
     }
     try:
         response = requests.get(url, params=params)
+
         state_code = response.json().get('response').get('header').get('resultCode')
         CheckErr(state_code)
     except ApiException as e:
@@ -110,6 +114,7 @@ def until_current_time_info(lat=38.005, lng=128.731):
 
 
 # 날씨 정보 데이터 필터링 및 반환, 0: 현재시간 데이터, 1: 5시간 이내 예측 데이터
+@lru_cache
 def weather_filter_info(response, base_time, opt):
     today = datetime.now()
     datas = response.json().get('response').get('body').get('items')
@@ -207,6 +212,7 @@ def weather_filter_info(response, base_time, opt):
 
 
 # 위도 경도 , 기상청 x,y 좌표로 변경
+@lru_cache
 def grid(lat, lng):
     v1, v2 = float(lat), float(lng)
     RE = 6371.00877  # 지구 반경(km)

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--    title Icon -->
+    <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
+
     <meta charset="UTF-8">
     <!--    Boot Strap  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -10,7 +13,11 @@
             crossorigin="anonymous"></script>
 
     <!-- 웹 폰트 -->
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
+          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap"
           rel="stylesheet">
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
@@ -28,16 +35,20 @@
     <title>끌</title>
 
     <style>
-
+        .wrapper {
+            height: 1200px;
+        }
     </style>
 
     <script>
+
         function logout() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!');
             window.location.href = "/";
         }
 
+        //게시글 저장
         function saving() {
             /*input 데이터 가져오기*/
             let location = $("#floatingInputLocation").val();
@@ -68,6 +79,7 @@
             });
         }
 
+        //로그인
         function login() {
             let username = $("#floatingInputID").val()
             let password = $("#floatingInputPW").val()
@@ -100,7 +112,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/")
+                        window.location.replace("/home")
                     } else {
                         alert(response['msg'])
                     }
@@ -113,7 +125,9 @@
 
 </head>
 <body>
-<!--                Login & sign Up Modal-->
+
+<div class="body_container">
+<!--Login & sign Up Modal-->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -230,6 +244,8 @@
         </div>
     </div>
 </div>
+
+<!--header-->
 <header id="header">
     <div class="container">
         <div class="row">
@@ -244,8 +260,8 @@
                         </li>
                     </ul>
                 </nav>
-                <a href="/">
-                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
+                <a href="/home">
+                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
                 </a>
                 <nav class="user_nav">
                     <ul>
@@ -278,7 +294,7 @@
     </div>
 </header>
 
-
+<!--본문-->
 <div class="wrapper">
     <div class="container">
         <div class="row">
@@ -339,61 +355,109 @@
                         </div>
                     </div>
                 </div>
-                <section id="main">
-                    <div class="main_content">
 
-                        <div class="img_box">
-                            <img class="Review_img" src="../static/img/{{review.file}}">
+                <div class="main_content">
+                    <div class="img_box">
+                        <img class="Review_img" src="../static/img/{{review.file}}">
+                    </div>
+                    <div class="review_detail">
+                        <div id="title">
+                            <h5 id="postNum" style="display: none">{{ review.post_num }}</h5>
+                            <h1>{{ review.spot_name }}</h1>
+                            <h2>{{ review.location }}</h2>
+                            <h4>{{ review.content }}</h4>
+                            <h3 style="margin-top: 90px">현재 기상 정보 {{ realtime_data.date}}</h3>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>시간</th>
+                                    <th>날씨</th>
+                                    <th>기온</th>
+                                    <th>파고</th>
+                                    <th>풍향</th>
+                                    <th>풍량</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{{ realtime_data.time_h }} : 00</td>
+                                    <td>{{ realtime_data.sky }}</td>
+                                    <td>{{ realtime_data.temp }}</td>
+                                    <td>{{ realtime_data.wav }}</td>
+                                    <td>{{ realtime_data.wind_deg }}</td>
+                                    <td>{{ realtime_data.wind }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            <h3 style="color: darkblue">
+                                <a href="https://www.google.com/search?q={{review.spot_name}}"><span> 이 장소 구글 검색하기 ! </span></a>
+                            </h3>
                         </div>
-                        <div class="review_detail">
-                            <div id="title">
-                                <h5 id="postNum" style="display: none">{{ review.post_num }}</h5>
-                                <h1>{{ review.spot_name }}</h1>
-                                <h2>{{ review.location }}</h2>
-                                <h4>{{ review.content }}</h4>
-                                <br>
-                                <h3 style="color: darkblue">
-                                    <a href="https://www.google.com/search?q={{review.spot_name}}"><span> 이 장소 구글 검색하기 ! </span></a>
-                                </h3>
+                        <!-- Comment 영역 -->
+                        <div class="comment_box">
+                            {% if user_info is not none %}
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="commentUserName">{{ user_info.name }}</span>
+                                <input type="text" class="form-control" placeholder="Comment Input"
+                                       aria-label="Comment Input" aria-describedby="button-addon2"
+                                       id="commentInput">
+                                <button class="btn btn-outline-dark" type="button" id="button-addon2"
+                                        onclick="save_comment()">
+                                    댓글 달기
+                                </button>
                             </div>
-                            <!-- Comment 영역 -->
-                            <div class="comment_box">
-                                {% if user_info is not none %}
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" id="commentUserName">{{ user_info.name }}</span>
-                                    <input type="text" class="form-control" placeholder="Comment Input"
-                                           aria-label="Comment Input" aria-describedby="button-addon2"
-                                           id="commentInput">
-                                    <button class="btn btn-outline-dark" type="button" id="button-addon2"
-                                            onclick="save_comment()">
-                                        댓글 달기
-                                    </button>
-                                </div>
+                            {% endif %}
+                            <div class="commentList">
+                                {% for comment in comments %}
+                                {% if comments[loop.index0].userID == user_info.id %}
+                                <p class="comment_row"><span>{{comments[loop.index0].username}} :
+                                                {{comments[loop.index0].comment}}</span>
+                                    <button type="button" class="btn-close" aria-label="Close"
+                                            onclick="delete_comment({{comments[loop.index0].comment_id }})"></button>
+                                </p>
+                                {% else %}
+                                <p class="comment_row"><span>{{comments[loop.index0].username}} :
+                                                {{comments[loop.index0].comment}}</span>
+                                </p>
                                 {% endif %}
-                                <div class="commentList">
-                                    {% for comment in comments %}
-                                    {% if comments[loop.index0].userID == user_info.id %}
-                                    <p class="comment_row"><span>{{comments[loop.index0].username}} :
-                                                {{comments[loop.index0].comment}}</span>
-                                        <button type="button" class="btn-close" aria-label="Close"
-                                                onclick="delete_comment({{comments[loop.index0].comment_id }})"></button>
-                                    </p>
-                                    {% else %}
-                                    <p class="comment_row"><span>{{comments[loop.index0].username}} :
-                                                {{comments[loop.index0].comment}}</span>
-                                    </p>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                </section>
 
+                </div>
+                <div class="weather">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>시간</th>
+                            <th>날씨</th>
+                            <th>기온</th>
+                            <th>파고</th>
+                            <th>풍향</th>
+                            <th>풍량</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for cast_weather_list in cast_weather_lists %}
+                        <tr>
+                            <td>{{ cast_weather_list.fcstTime }}</td>
+                            <td>{{ cast_weather_list.sky }}</td>
+                            <td>{{ cast_weather_list.tmp }}</td>
+                            <td>{{ cast_weather_list.wav }}</td>
+                            <td>{{ cast_weather_list.vec }}</td>
+                            <td>{{ cast_weather_list.wsd }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- footer -->
 <footer id="footer">
     <div id="footer_info">
@@ -401,7 +465,7 @@
             <div class="row">
                 <div class="footer_info">
                     <h2>
-                        <img src="../static/img/logo.png">
+                        <img src="../static/img/logo2.png">
                     </h2>
                     <ul>
                         <li>4조</li>
@@ -414,8 +478,11 @@
         </div>
     </div>
 </footer>
+</div>
 </body>
+
 <script>
+    <!--    Comment 저장-->
     function save_comment() {
         let pageInfo = "fin"
         let postNum = $('#postNum').text()
@@ -443,6 +510,7 @@
 
     }
 
+    //Comment 삭제
     function delete_comment(delete_id) {
         let res = confirm('삭제할까요?')
         if (res == true) {

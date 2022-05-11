@@ -2,6 +2,9 @@
 <html lang="en">
 
 <head>
+    <!--    title Icon -->
+    <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -23,12 +26,15 @@
     <title>FIN</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital@1&display=swap" rel="stylesheet">
-<!--    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap" rel="stylesheet">
     <script>
+<!--        Youtube 영상 플레이어-->
         jQuery( function() {
             jQuery( '#background' ).YTPlayer();
             });
-
+        //인트로 안내 문구 애니메이션 효과
         $(document).ready(function () {
 
             var jbTime = 5000;
@@ -44,25 +50,17 @@
                 });
             });
         });
-
+        //Index Page 이동
         function goIndex() {
             location.href = "/home"
         }
-
-        function logout() {
-            $.removeCookie('mytoken', {path: '/'});
-            window.location.href = "/";
-        }
-
-
-
 
     </script>
 
 </head>
 
 <body>
-
+<!--배경 영상 및 옵션-->
 <div id="background" class="player" data-property="{
   videoURL: 'https://www.youtube.com/watch?v=O_aXrxyoiVE',
   mute: true,
@@ -80,7 +78,7 @@
 </div>
 
 
-
+<!--인트로 문구-->
 <div class="main_text">
     <h2>Surf,<br>이FIN림</h2>
     <button onclick="goIndex()">&nbsp;HOME&nbsp;</button>

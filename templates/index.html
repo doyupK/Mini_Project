@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--    title Icon -->
+    <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +30,13 @@
 
     <title>끌</title>
 
+    <!--    font-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap" rel="stylesheet">
+
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
     <!--    Sign Up 스크립트 불러오기   -->
@@ -159,7 +167,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/")
+                        window.location.replace("/home")
                     } else {
                         alert(response['msg'])
                     }
@@ -342,25 +350,21 @@
                     </ul>
                 </nav>
                 <a href="/home">
-                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
+                    <img src="../static/img/logo2.png" alt="FIN_logo">
                 </a>
                 <nav class="user_nav">
                     <ul>
                         {% if login_status == 0 %}
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-regular fa-user"></i>로그인
                                 </a>
                             </li>
-                        </strong>
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
-                        </strong>
                         {% elif login_status == 1 %}
                         <li class="nav-text"><a>{{user_info.name}} 님</a></li>
                         <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
@@ -468,7 +472,7 @@
                 <div class="row">
                     <div class="footer_info">
                         <h2>
-                            <img src="../static/img/logo2.png">
+                            <img src="../static/img/logo2.png" alt="FIN_logo">
                         </h2>
                         <ul>
                             <li>4조</li>
