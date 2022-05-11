@@ -18,7 +18,7 @@ client = MongoClient('localhost', 27017)
 db = client.sparta_1week
 app = Flask(__name__)
 
-hash_key = data_source.SECRET_KEY
+hash_key = data_resource.SECRET_KEY
 
 @app.route('/')
 def intro():
