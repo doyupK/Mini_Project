@@ -6,18 +6,26 @@ import certifi
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime, timedelta
 import jwt as jwt
+import googlemaps
 import data_resource
 
 from get_data import get_locations, get_list_by_location
+
+gmap = data_resource.gmap
 
 ca = certifi.where()
 client = MongoClient('localhost', 27017)
 db = client.sparta_1week
 app = Flask(__name__)
 
-hash_key = data_resource.SECRET_KEY
+hash_key = data_source.SECRET_KEY
 
 @app.route('/')
+def intro():
+    return render_template('intro.html')
+
+
+@app.route('/home')
 def home():
     token_receive = request.cookies.get('mytoken')
 
@@ -44,6 +52,7 @@ def find_by_city():
     received_city = request.args.get("city")
     return jsonify(get_list_by_location(received_city))
 
+
 # fin 게시글 저장 - 220509 DY
 @app.route('/surfer/write_post', methods=['POST'])
 def save_posts():
@@ -62,6 +71,10 @@ def save_posts():
 
     location_receive = request.form['location_give']
     name_receive = request.form['name_give']
+    # 주소 -> 위/경도 변환
+    result = gmap.geocode(name_receive)
+    n_lat = result[0]['geometry']['location']['lat']
+    n_lng = result[0]['geometry']['location']['lng']
     content_receive = request.form['content_give']
 
     file = request.files["file_give"]
@@ -84,6 +97,8 @@ def save_posts():
         'location': location_receive,
         'spot_name': name_receive,
         'content': content_receive,
+        'lat': n_lat,
+        'lng': n_lng,
         'file': f'{filename}.{extension}',
         'time': today.strftime('%Y.%m.%d'),
         'COMMENT': []
@@ -116,6 +131,7 @@ def users():
 
     return jsonify({'msg': '회원 가입 완료!'})
 
+
 # 아이디 중복 확인 220510 DY
 @app.route("/users_idCheck", methods=["GET"])
 def getId():
@@ -143,7 +159,6 @@ def sign_in():
             'id': id_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
-
         token = jwt.encode(payload, hash_key,
                            algorithm='HS256')  # .decode('utf8')
         # .decode('utf8')  # 토큰을 건내줌.
