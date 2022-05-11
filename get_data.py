@@ -1,5 +1,5 @@
 import json
-from functools import cache
+from functools import cache, lru_cache
 
 import requests
 
@@ -8,7 +8,7 @@ with open('./static/location_data.json', 'r', encoding="UTF-8") as base:
 
 
 @cache
-def get_locations(do=0):
+def get_locations(do="강원"):
     countries = list()
     location = json_data["locations"]
     print(do)
