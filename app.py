@@ -1,4 +1,5 @@
 import hashlib
+
 from django.core.paginator import Paginator
 from pymongo import MongoClient
 import certifi
@@ -16,7 +17,6 @@ ca = certifi.where()
 client = data_resource.client
 db = client.dbsparta
 app = Flask(__name__)
-
 
 hash_key = data_resource.SECRET_KEY
 
@@ -41,11 +41,20 @@ def home():
         return render_template('index.html', login_status=login_status)
 
 
+
+# 지역별 페이지 이동
+@app.route('/location_lists/<location>')
+def location_lists(location):
+    return render_template('location_list.html')
+
+
+
 # 도 하위 시별 리스트
 @app.route('/city_lists')
 def locations():
     select_do = request.args.get("do")
-    return jsonify(get_locations(select_do))
+    print(select_do)
+    return jsonify(get_locations(int(select_do)))
 
 
 # 도에 해당 하는 지역 리스트 반환
@@ -161,6 +170,7 @@ def sign_in():
             'id': id_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
+
         token = jwt.encode(payload, hash_key,
                            algorithm='HS256')  # .decode('utf8')
         # .decode('utf8')  # 토큰을 건내줌.
@@ -291,9 +301,19 @@ def delete_comment():
     # post Number 찾아서 해당 게시글 DB 정보에서 삭제
     if pageInfo_receive == "fin":
         db.fin_Reviews.update_many({'post_num': postNum_receive},
-                               {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
+                                   {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
+
+# Main Page 지역 TOP4 by JH
+
+@app.route("/review", methods=["GET"])
+def commenst_get():
+    all_reivew = list(db.fin_Reviews.find({}, {'_id': False}).limit(4))
+
+    return jsonify({'review': all_reivew})
+
+
 
 
 if __name__ == '__main__':
