@@ -102,7 +102,6 @@ li {
 
 .area_top {
     text-align: center;
-    margin-top: 80px;
     width: 50%;
     height: 800px;
     float: left;
@@ -115,20 +114,15 @@ li {
 }
 
 .area_top_title {
-    margin: 20px auto 20px auto;
+    margin: 10px auto 10px auto;
 }
 
 .area_col {
     width: 40%;
     text-align: center;
-    box-shadow: 4px 4px 4px;
     float: left;
-    margin: 0px 30px 30px 20px;
+    margin: -50px 30px 10px 20px;
 
-}
-
-.area_col:hover {
-    box-shadow: 10px 10px 10px;
 }
 
 a {
@@ -241,7 +235,7 @@ a {
 
 /* 푸터 */
 #footer {
-    margin-top: 150px;
+    margin-top: 200px;
     position: absolute;
     width: 100%;
     background-color: rgba(167, 194, 255, 0.4);
