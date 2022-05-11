@@ -114,7 +114,8 @@ li {
 }
 
 .area_top_title {
-    margin: 10px auto 10px auto;
+    margin: 45px auto 65px auto;
+    font-size: 4vh;
 }
 
 .area_col {
@@ -235,7 +236,7 @@ a {
 
 /* 푸터 */
 #footer {
-    margin-top: 200px;
+    margin-top: 300px;
     position: absolute;
     width: 100%;
     background-color: rgba(167, 194, 255, 0.4);

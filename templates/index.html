@@ -54,7 +54,7 @@
 
     </style>
     <script>
-        function goLocationListsPage() {
+         function goLocationListsPage() {
             let lands = document.getElementsByClassName('land');
             [...lands].forEach((land, idx) => {
                 land.addEventListener('mouseover', (e) => {
@@ -172,6 +172,10 @@
             location.href = "/detail/" + number
         }
 
+
+        $(function () {
+            goLocationListsPage()
+        })
     </script>
 </head>
 <body>
@@ -376,7 +380,7 @@
                     <!--{id:"KR-11"},{id:"KR-26"},{id:"KR-27"},{id:"KR-28"},{id:"KR-29"},{id:"KR-30"},{id:"KR-31"},{id:"KR-41"},{id:"KR-42"},{id:"KR-43"},{id:"KR-44"},{id:"KR-45"},{id:"KR-46"},{id:"KR-47"},{id:"KR-48"},{id:"KR-49"},{id:"KR-50"}-->
 
                 </defs>
-                <g>
+                 <g>
                     <path id="KR-11" title="서울" class="enabled"
                           d="M133.184,290.751L133.184,290.751L136.984,294.568L137.744,299.961L138.871,300.389L141.281,299.139L144.374,304.958L146.181,304.235L149.772,304.629L153.939,302.327L157.004,302.032L157.686,304.958L161.329,302.886L164.315,302.624L165.994,301.047L165.967,299.896L167.225,299.6L168.509,297.89L167.33,296.804L167.723,294.305L170.918,292.166L169.478,288.611L164.683,290.784L163.136,290.356L164.551,285.022L162.481,280.312L162.375,275.796L160.281,274.511L155.328,274.313L153.152,275.83L151.527,278.599L151.45,281.597L150.348,282.388L145.212,282.783L143.588,287.295L139.971,288.907L134.913,285.714L132.739,289.171L132.739,289.171z"/>
 
@@ -418,7 +422,7 @@
 
             <div class="area_top">
                 <div class="area_top_title">
-                    <h4>지역 TOP</h4>
+                    <p>지역 TOP</p>
                 </div>
                 <div id="rank" class="area_md">
                     {% for top_reveiw in top_reveiws %}
@@ -442,7 +446,6 @@
                             </div>
                         </div>
                     </div>
-
                     {% endfor %}
 
                 </div>
