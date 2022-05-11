@@ -15,13 +15,14 @@ li {
     z-index: 1;
 }
 .wrapper {
-    height: 1200px;
+    /*height: 1200px;*/
     min-height: 100%;
 }
 
 .container {
     position: relative;
     width: 1280px;
+    /*height: 1000px;*/
     margin: 0 auto;
 
 }
@@ -94,7 +95,7 @@ li {
 
 /*index middle*/
 .area {
-    height: 800px;
+    height: 1000px;
     float: left;
     padding-left: 50px;
     display: flex;
@@ -186,9 +187,11 @@ a {
     max-width: 240px;
     transition: all 0.2s linear;
     cursor: pointer;
+    border-radius: 3%;
 }
 
 .post_size img:hover {
+    border-radius: 15%;
     transform: scale(1.2);
 }
 .card {
@@ -276,3 +279,4 @@ a {
 .footer_info li {
     color: #000000;
 }
+

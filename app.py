@@ -9,6 +9,9 @@ import jwt as jwt
 import googlemaps
 import data_resource
 from get_data import get_locations, get_list_by_location
+from weather_api import get_weather_info, until_current_time_info
+
+
 
 gmap = data_resource.gmap
 
@@ -20,10 +23,12 @@ app = Flask(__name__)
 
 hash_key = data_resource.SECRET_KEY
 
+
 # Intro Page 진입 by DY
 @app.route('/')
 def intro():
     return render_template('intro.html')
+
 
 # Index Page 진입 by DY
 @app.route('/home')
@@ -41,12 +46,10 @@ def home():
         return render_template('index.html', login_status=login_status)
 
 
-
 # 지역별 페이지 이동
 @app.route('/location_lists/<location>')
 def location_lists(location):
     return render_template('location_list.html')
-
 
 
 # 도 하위 시별 리스트
@@ -222,6 +225,21 @@ def detail(keyword):
         'COMMENT': 1, '_id': False})
     # 해당(keyword) 게시물 정보 불러오기
     review = db.fin_Reviews.find_one({'post_num': find_keyword})
+    give_lat = review['lat']
+    give_lng = review['lng']
+    realtime_weather, cast_weather = get_weather(give_lat, give_lng)
+    realtime_data = {
+        'date': realtime_weather['date'],
+        # 'time': realtime_weather['weather']['fcstTime'],
+        'time_h': realtime_weather['weather']['fcstTime'][:2],
+        'time_m': realtime_weather['weather']['fcstTime'][-2],
+        'temp': realtime_weather['weather']['tmp'],
+        'wind': realtime_weather['weather']['wsd'],
+        'wind_deg': realtime_weather['weather']['vec'],
+        'sky': realtime_weather['weather']['sky'],
+        'wav': realtime_weather['weather']['wav'],
+    }
+    cast_weather_lists = cast_weather['weather']
     # 로그인 정보(token)있을 시
     if token_receive is not None:
         payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
@@ -230,12 +248,14 @@ def detail(keyword):
         if len(comments_name) == 0:
             return render_template('recommend_detail.html',
                                    review=review, user_info=user_info,
-                                   login_status=login_status)
+                                   login_status=login_status, realtime_data=realtime_data,
+                                   cast_weather_lists=cast_weather_lists)
         else:
             comments = list(comments_name['COMMENT'])
             return render_template('recommend_detail.html',
                                    review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
+                                   user_info=user_info, login_status=login_status, realtime_data=realtime_data,
+                                   cast_weather_lists=cast_weather_lists)
     # 로그인 정보(token)없을 시
     else:
         user_info = None
@@ -243,12 +263,21 @@ def detail(keyword):
         if len(comments_name) == 0:
             return render_template('recommend_detail.html',
                                    review=review, user_info=user_info,
-                                   login_status=login_status)
+                                   login_status=login_status, realtime_data=realtime_data,
+                                   cast_weather_lists=cast_weather_lists)
         else:
             comments = list(comments_name['COMMENT'])
             return render_template('recommend_detail.html',
                                    review=review, comments=comments,
-                                   user_info=user_info, login_status=login_status)
+                                   user_info=user_info, login_status=login_status, realtime_data=realtime_data,
+                                   cast_weather_lists=cast_weather_lists)
+
+
+def get_weather(lat, lng):
+    data_receive = get_weather_info(lat, lng)
+    data_cast = until_current_time_info(lat, lng)
+
+    return data_receive, data_cast
 
 
 # 코멘트 저장 220429 DY
@@ -314,7 +343,5 @@ def commenst_get():
     return jsonify({'review': all_reivew})
 
 
-
-
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5000, debug=True, threaded=True)
