@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/8f4978e361.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script src="//code.jquery.com/jquery-latest.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.3.9/css/jquery.mb.YTPlayer.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.3.4/jquery.mb.YTPlayer.min.js"></script>
+
+    <link rel="stylesheet" href="../static/css/intro.css">
+
+    <title>FIN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital@1&display=swap" rel="stylesheet">
+<!--    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <script>
+        jQuery( function() {
+            jQuery( '#background' ).YTPlayer();
+            });
+
+        $(document).ready(function () {
+
+            var jbTime = 5000;
+            $('.first_message').animate({
+                opacity: '1'
+            }, jbTime, function () {
+                $('.second_message').animate({
+                    opacity: '1'
+                }, jbTime-3000, function () {
+                    $('.third_message').animate({
+                        opacity: '1'
+                    }, jbTime-3000);
+                });
+            });
+        });
+
+        function goIndex() {
+            location.href = "/home"
+        }
+
+        function logout() {
+            $.removeCookie('mytoken', {path: '/'});
+            window.location.href = "/";
+        }
+
+
+
+
+    </script>
+
+</head>
+
+<body>
+
+<div id="background" class="player" data-property="{
+  videoURL: 'https://www.youtube.com/watch?v=O_aXrxyoiVE',
+  mute: true,
+  showControls: false,
+  useOnMobile: true,
+  quality: 'highres',
+  containment: 'body',
+  loop: true,
+  autoPlay: true,
+  stopMovieOnBlur: false,
+  startAt: 0,
+  stopAt: 150,
+  opacity: 1
+}">
+</div>
+
+
+
+<div class="main_text">
+    <h2>Surf,<br>이FIN림</h2>
+    <button onclick="goIndex()">&nbsp;HOME&nbsp;</button>
+    <h4 class="first_message">안녕하세요</h4>
+    <h4 class="second_message">저희 끌[FIN]은 서프 보드의 키잡이을 담당하는 Fin처럼</h4>
+    <h4 class="third_message">서프 명소로의 길잡이가 되어드리려 합니다.</h4>
+</div>
+
+</body>
+</html>
