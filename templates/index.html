@@ -77,7 +77,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/home")
+                        window.location.replace("/")
                     } else {
                         alert(response['msg'])
                     }
@@ -85,6 +85,42 @@
             });
         }
 
+
+        // 지역top 불러오기 by JH
+        $(document).ready(function () {
+            commenst_get();
+        });
+        function commenst_get() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/review',
+                data: {},
+                success: function (response) {
+                    let row = response['review']
+                    for (let i = 0; i < row.length; i++) {
+                        let location = row[i]['location']
+                        let sopt = row[i]['spot_name']
+                        let content = row[i]['content']
+                        let file = row[i]['file']
+
+                        let temp_html = ` <div class="area_col">
+                                            <div class="card h-100">
+                                                <img src="static/img/${file}" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><b>${location}</b></h5>
+                                                    <p class="card-text">${sopt}</p>
+                                                    <p class="card-text">${content}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                        `
+                        $('#rank').append(temp_html)
+                    }
+
+                }
+            });
+        }
 
 
     </script>
@@ -322,60 +358,12 @@
             </svg>
 
 
-        <div class="area_top">
-            <div class="area_top_title">
-                <p>지역 TOP</p>
-            </div>
-            <div class="area_md">
-                <div class="area_col">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                <div class="area_col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                <div class="area_col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-                <div class="area_col ">
-                        <div class="card h-100">
-                            <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>태안 진하 해변</b></h5>
-                                <p class="card-text"></p>
-                                <p class="card-text">현재 파고: &nbsp;-&nbsp;</p>
-                                <p class="card-text">현재 풍향/풍량: &nbsp;-&nbsp;/&nbsp;-&nbsp;</p>
-                                <sub>공개 출처: 해양 수산부</sub>
-                            </div>
-                        </div>
-                    </div>
-            </div>
+            <div class="area_top">
+                <div class="area_top_title">
+                    <p>지역 TOP</p>
+                </div>
+                <div id="rank" class="area_md" >
+                </div>
 
         </div>
             </div>
