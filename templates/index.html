@@ -56,7 +56,7 @@
 
         function goLocationListsPage() {
             let lands = document.getElementsByClassName('land');
-            [...lands].forEach((land) => {
+            [...lands].forEach((land, idx) => {
                 land.addEventListener('mouseover', (e) => {
                     let title = e.target.getAttribute('title')
                     $('#do-name').text(title)
@@ -67,7 +67,9 @@
                 })
                 land.addEventListener('click', (e) => {
                     let title = e.target.getAttribute('title')
+                    sessionStorage.setItem("active", idx)
                     let do_name = "";
+
                     $('#do-name').text(title)
                     switch (title) {
                         case "강원":
@@ -93,7 +95,7 @@
                             do_name = 5
                             break
                     }
-                    location.href = "/location_lists/"+do_name
+                    location.href = "/location_lists/" + do_name
                 })
             })
         }

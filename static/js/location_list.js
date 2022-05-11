@@ -3,6 +3,7 @@ function get_locations() {
 
     let do_name = window.location.href
     let do_num = do_name.substring(do_name.length - 1, do_name.length)
+
     $.ajax({
         type: "GET",
         url: "/city_lists",
@@ -12,7 +13,6 @@ function get_locations() {
             rows.forEach((data, i) => {
                 //UI 메서드
                 draw_tabs(data, i)
-
                 document.getElementsByClassName("select-location")[i].addEventListener('click', tab_event)
             })
         },
@@ -22,6 +22,11 @@ function get_locations() {
             let first = document.getElementsByClassName("select-location")[0].innerHTML
             console.log(first)
             get_select_data(first, 0)
+
+            if (!!sessionStorage.getItem("active")) {
+                let mapIdx = sessionStorage.getItem("active")
+                $(".land").eq(mapIdx).css("fill","cadetblue").css("stroke","aquamarine");
+            }
 
         }
     });
