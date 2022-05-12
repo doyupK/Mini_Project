@@ -1,6 +1,6 @@
 import math
 from datetime import date, datetime, timedelta
-from functools import cache
+from functools import lru_cache
 
 import requests
 
@@ -84,7 +84,7 @@ def get_weather_info(lat=38.005, lng=128.731):
 
 
 # 현재 시간 기준 5시간분 데이터
-@cache
+@lru_cache
 def until_current_time_info(lat=38.005, lng=128.731):
     page_no = '1'
     num_of_rows = '72'

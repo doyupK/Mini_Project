@@ -1,5 +1,5 @@
 import json
-from functools import cache
+from functools import lru_cache
 
 import requests
 
@@ -10,7 +10,7 @@ with open('./static/beach_info.json', 'r', encoding="UTF-8") as f:
     json_beach_data = json.load(f)
 
 
-@cache
+@lru_cache
 def get_locations(do=0):
     countries = list()
     location = json_data["locations"]
@@ -19,7 +19,7 @@ def get_locations(do=0):
 
 
 # 시명 기준 으로 데이터 가져오기
-@cache
+@lru_cache
 def get_list_by_location(city):
     location_code = json_data['code'][city]
     return find_by_code_to_json(location_code)
@@ -34,7 +34,7 @@ def find_by_code_to_json(codes):
 
 
 # 해당 도 하위 시 데이터 모두 가져오기
-@cache
+@lru_cache
 def get_main_list(do="강원"):
     results_main = list()
     base_code = list()

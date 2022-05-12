@@ -68,8 +68,20 @@ def find_by_city():
 def location_detail(location, lat, lng):
     result = until_current_time_info(lat, lng)
     weathers = result['weather']
+    token_receive = request.cookies.get('mytoken')
     print(weathers)
-    return render_template('location_detail.html', beach=location, data=weathers[0], weathers=weathers)
+    if token_receive is not None:
+        payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
+        user_info = db.fin_users.find_one({"id": payload["id"]})
+        login_status = 1
+        return render_template('location_detail.html', user_info=user_info,
+                               login_status=login_status,
+                               beach=location, data=weathers[0], weathers=weathers)
+    else:
+        login_status = 0
+        return render_template('location_detail.html', login_status=login_status,
+                               beach=location, data=weathers[0], weathers=weathers)
+
 
 # fin 게시글 저장 - 220509 DY
 @app.route('/surfer/write_post', methods=['POST'])
