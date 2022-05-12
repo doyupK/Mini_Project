@@ -571,6 +571,7 @@
                                             <td>{{comment.id}}</td>
                                             <td>{{comment.date}}</td>
                                             <td>
+                                                {% if login_status == 1 %}
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <button type="button"
                                                             class="btn btn-outline-secondary p-2 update-comment"
@@ -582,6 +583,9 @@
                                                             style="font-size:5px">삭제
                                                     </button>
                                                 </div>
+                                                {%else%}
+                                                -
+                                                {%endif%}
                                             </td>
                                         </tr>
                                         {% endfor %}
