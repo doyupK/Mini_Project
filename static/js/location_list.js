@@ -64,9 +64,10 @@ function get_select_data(area, tabIdx) {
             [...cards].forEach((card, idx) => {
                 card.addEventListener('click', (e) => {
                     let title = document.getElementsByClassName('beach-title')[idx].innerHTML
+                    let code = document.getElementsByClassName('beach_code')[idx].innerHTML
                     let lat = document.getElementsByClassName("lat")[idx].innerHTML
                     let lng = document.getElementsByClassName("lng")[idx].innerHTML
-                    window.location.href = "/locations/detail/"+title+"/"+lat+"/"+lng
+                    window.location.href = "/locations/detail/"+title+"/"+code+"/"+lat+"/"+lng
                 })
             })
         }
@@ -95,13 +96,14 @@ function draw_tabs(locations, i) {
 // UI 생성 tab content, cards
 // param('filtering location forecast data')
 function draw_cards(data, i) {
-    let {name, lat, lng} = data
+    let {name,code, lat, lng} = data
     let card = ` <div class="col">
                         <div class="card h-100 w-100">
                             <img src="../static/img/sample.jpg" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title"><b class ="beach-title">${name}</b></h5>
                                 <p class="card-text"></p>
+                                 <span class = 'beach_code' style="display: none">${code}</span>
                                 <span class = 'lat' style="display: none">${lat}</span>
                                 <span class = 'lng' style="display: none">${lng}</span>
                             </div>

@@ -1,8 +1,10 @@
 import hashlib
+import uuid
 from datetime import datetime, timedelta
 
 import certifi
 import jwt as jwt
+from bson import ObjectId
 from django.core.paginator import Paginator
 from flask import Flask, render_template, request, jsonify
 
@@ -63,9 +65,10 @@ def find_by_city():
     received_city = request.args.get("city")
     return jsonify(get_list_by_location(received_city))
 
-#지역 상세 페이지
-@app.route('/locations/detail/<location>/<lat>/<lng>')
-def location_detail(location, lat, lng):
+
+# 지역 상세 페이지
+@app.route('/locations/detail/<location>/<code>/<lat>/<lng>')
+def location_detail(location, code, lat, lng):
     result = until_current_time_info(lat, lng)
     weathers = result['weather']
     token_receive = request.cookies.get('mytoken')
@@ -74,13 +77,97 @@ def location_detail(location, lat, lng):
         payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
         user_info = db.fin_users.find_one({"id": payload["id"]})
         login_status = 1
+        locations_comments = list(db.location_comments.find({'code': code}).limit(5))
+        for comment in locations_comments:
+            db_date = comment['date']
+            t_idx = str(db_date).index('T')
+            comment['date'] = db_date[0:t_idx]
+
         return render_template('location_detail.html', user_info=user_info,
                                login_status=login_status,
-                               beach=location, data=weathers[0], weathers=weathers)
+                               beach=location, data=weathers[0], weathers=weathers, comments=locations_comments,
+                               code=code)
     else:
         login_status = 0
+        locations_comments = list()
         return render_template('location_detail.html', login_status=login_status,
-                               beach=location, data=weathers[0], weathers=weathers)
+                               beach=location, data=weathers[0], weathers=weathers, comments=locations_comments,
+                               code=code)
+
+
+@app.route("/detail/get_comments")
+def get_comments():
+    comment_id = request.args.get("id")
+    data = db.location_comments.find_one({"_id": ObjectId(comment_id)}, {'_id': False})
+
+    return jsonify(data)
+
+
+# 지역 댓글 저장
+@app.route('/detail/write_comments', methods=['POST'])
+def save_comments():
+    token_receive = request.cookies.get('mytoken')
+
+    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
+    user_info = db.fin_users.find_one({"id": payload["id"]})
+
+    user_name = user_info['name']
+    user_id = user_info['id']
+    content = request.form['content']
+    date = request.form['date']
+    code = request.form['code']
+
+    comments_info = {
+        "id": user_id,
+        "code":code,
+        "name": user_name,
+        "comment": content,
+        "date": date
+    }
+    db.location_comments.insert_one(comments_info)
+    return jsonify({'msg': '저장 완료!'})
+
+
+# 지역 댓글 수정
+@app.route('/detail/update_comments', methods=['POST'])
+def update_comments():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
+    user_info = db.fin_users.find_one({"id": payload["id"]})
+
+    login_id = user_info['id']
+    comments_id = request.form['uuid']
+    date = request.form['date']
+    received_comment = request.form['content']
+    comment = db.location_comments.find_one({"_id": ObjectId(comments_id)}, {'_id': False})
+
+    if comment['id'] == login_id:
+        condition1 = {"_id": ObjectId(comments_id)}
+        condition2 = {
+            "comment": received_comment,
+            "date": date
+        }
+        db.location_comments.update_one(condition1, {"$set": condition2})
+        return jsonify({'msg': '수정 완료!'})
+    else:
+        return jsonify({'msg': '권한이 없습니다.!'})
+
+
+@app.route('/detail/delete_comments', methods=['POST'])
+def delete_comments():
+    token_receive = request.cookies.get('mytoken')
+    payload = jwt.decode(token_receive, hash_key, algorithms=['HS256'])
+    user_info = db.fin_users.find_one({"id": payload["id"]})
+    comments_id = request.form['uuid']
+    doc ={"_id": ObjectId(comments_id)}
+
+    login_id = user_info['id']
+    writer = db.location_comments.find_one(doc)
+    if writer['id'] == login_id:
+        db.location_comments.delete_one(doc)
+        return jsonify({'msg': '삭제 완료!'})
+    else:
+        return jsonify({'msg': '권한이 없습니다.!'})
 
 
 # fin 게시글 저장 - 220509 DY

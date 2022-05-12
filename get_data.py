@@ -29,6 +29,7 @@ def get_list_by_location(city):
 def find_by_code_to_json(codes):
     result = list()
     for code in codes:
+        json_beach_data[code]['code'] = code
         result.append(json_beach_data[code])
     return result
 

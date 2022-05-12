@@ -97,10 +97,106 @@
                 }
             });
         }
+
+        function comment_save() {
+            let today = new Date().toISOString();
+            let code = document.getElementById("beach-code").innerText
+
+            let content = $("#commentsArea").val();
+            let datas = new FormData();
+            datas.append('content', content)
+            datas.append('date', today)
+            datas.append('code', code)
+            $.ajax({
+                type: "POST",
+                url: "/detail/write_comments",
+                data: datas,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response['msg']);
+                    location.reload()
+                },
+            });
+        }
+
+        function get_comment() {
+            const tbody = document.getElementById("comments-box")
+            let updateBtn = document.getElementsByClassName("update-comment");
+            [...updateBtn].forEach(function (btn, idx) {
+                btn.addEventListener('click', (e) => {
+                    let tr = tbody.children[idx]
+                    let comments_id = tr.children[0].innerHTML
+                    let code = document.getElementById('beach-code').innerText
+                    document.getElementById("update-uuid").innerText = comments_id
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/detail/get_comments",
+                        data: {"id": String(comments_id)},
+                        success: function (response) {
+                            document.getElementById("commentsArea-update").innerText = response.comment
+                        },
+                    });
+                })
+            })
+            const deleteBtn = document.getElementsByClassName("delete-comment");
+            [...deleteBtn].forEach(function(btn,idx){
+                btn.addEventListener('click', ()=>{
+                    let tr = tbody.children[idx]
+                    let comments_id = tr.children[0].innerHTML
+                    comment_delete(comments_id)
+                })
+            })
+
+        }
+
+        function comment_update() {
+            let today = new Date().toISOString();
+            let content = $("#commentsArea-update").val();
+            console.log(content)
+            let datas = new FormData();
+            let uuid = document.getElementById("update-uuid").innerText
+            datas.append('content', content)
+            datas.append('date', today)
+            datas.append('uuid', uuid)
+            $.ajax({
+                type: "POST",
+                url: "/detail/update_comments",
+                data: datas,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response['msg']);
+                    location.reload()
+                },
+            });
+        }
+        function comment_delete(uuid) {
+            let ud = uuid
+            datas = new FormData
+            datas.append('uuid', ud)
+            $.ajax({
+                type: "POST",
+                url: "/detail/delete_comments",
+                data: datas,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert(response['msg']);
+                    location.reload()
+                },
+            });
+        }
+        $(function () {
+            get_comment()
+        })
     </script>
 </head>
 <body>
-
 
 
 <!--                Login & sign Up Modal-->
@@ -240,16 +336,16 @@
                 <nav class="user_nav">
                     <ul>
                         {% if login_status == 0 %}
-                            <li class="nav-text">
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
-                                    <i class="fa-regular fa-user"></i>로그인
-                                </a>
-                            </li>
-                            <li class="nav-text">
-                                <a type="button" data-bs-toggle="modal"
-                                   data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
-                                    <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
+                        <li class="nav-text">
+                            <a type="button" data-bs-toggle="modal"
+                               data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
+                                <i class="fa-regular fa-user"></i>로그인
+                            </a>
+                        </li>
+                        <li class="nav-text">
+                            <a type="button" data-bs-toggle="modal"
+                               data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
+                                <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
                         {% elif login_status == 1 %}
                         <li class="nav-text"><a>{{user_info.name}} 님</a></li>
                         <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
@@ -270,14 +366,17 @@
             <div class="row p-0">
                 <div class="col-md-5 col-sm-5 col-lg-5">
                     <div class="card location-card h-100">
-                        <img src="{{ url_for('static',filename='./img/sample.jpg') }}" class="card-img-top h-100" alt="...">
+                        <img src="{{ url_for('static',filename='./img/sample.jpg') }}" class="card-img-top h-100"
+                             alt="...">
                         <div class="card-body" style="border: none">
                             {% if beach is not none %}
                             <div class="card-title"><b>{{beach}}</b></div>
+                            <span id="beach-code" style="display: none">{{code}}</span>
                             {% endif %}
                             {% if beach is none %}
                             <div class="card-title"><b>상세 정보 없음</b></div>
                             {% endif %}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -389,75 +488,138 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-sm-12 mt-3">
+                            <!-- Modal -->
+                            <div class="modal fade" id="write-comments" tabindex="-1"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">댓글 작성</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" placeholder="댓글 작성"
+                                                          id="commentsArea" style="height: 100px"></textarea>
+                                                <label for="commentsArea">댓글</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer p-0">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                취소
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="comment_save()">저장
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- Modal -->
+                            <div class="modal fade" id="update-comments" tabindex="-1"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <span id = "update-uuid" style="display: none"></span>
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="update">댓글 수정</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" placeholder="댓글 작성"
+                                                          id="commentsArea-update" style="height: 100px"></textarea>
+                                                <label for="commentsArea-update">댓글</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer p-0">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                취소
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                    onclick="comment_update()">저장
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card location-card">
                                 <div class="card-body">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th colspan="7">댓글</th>
-
+                                            <th colspan="8">댓글</th>
+                                            <th width="10%">
+                                                {% if user_info is not none %}
+                                                <button class="btn btn-outline-secondary p-1" type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#write-comments">작성
+                                                </button>
+                                                {% endif %}
+                                            </th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="comments-box">
+
+                                        {% if not comments|length == 0 %}
+                                        {% for comment in comments %}
                                         <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td class="uuid" style="display: none">{{comment._id}}</td>
+                                            <td> {{ loop.index }}</td>
+                                            <td colspan="5" width="60%">{{comment.comment }}</td>
+                                            <td>{{comment.id}}</td>
+                                            <td>{{comment.date}}</td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button"
+                                                            class="btn btn-outline-secondary p-2 update-comment"
+                                                            style="font-size:5px" data-bs-toggle="modal"
+                                                            data-bs-target="#update-comments">수정
+                                                    </button>
+                                                    <button type="button"
+                                                            class="btn btn-outline-secondary p-2 delete-comment"
+                                                            style="font-size:5px">삭제
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% else %}
+
+                                        <tr>
+                                            <td colspan="8">댓글 없음</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td colspan="8">-</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td colspan="8">-</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td colspan="8">-</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
+                                            <td colspan="8">-</td>
+                                            <td></td>
                                         </tr>
+                                        {% endif %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-
 <!-- footer -->
 <footer id="footer">
     <div id="footer_info">
@@ -473,9 +635,9 @@
                         <li>임정현</li>
                         <li>김도엽</li>
                         <br>
-                        <li>자료 출처 : 기상청 </li>
+                        <li>자료 출처 : 기상청</li>
                         <br>
-                        <li>문의 : @ </li>
+                        <li>문의 : @</li>
                     </ul>
                 </div>
             </div>

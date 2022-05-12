@@ -133,14 +133,16 @@ def weather_filter_info(response, base_time, opt):
             # 시간에 따른 기상 데이터 리스트 append
             if not fcst_time == item['fcstTime']:
                 fcst_time = item['fcstTime']
-                print(weather_data)
                 if not weather_data.__len__() == 0:
                     all_time_data.append(weather_data)
                     weather_data = {}
 
         # 1 시간 기온 코드
         if category == 'TMP':
-            weather_data["fcstTime"] = item['fcstTime']
+
+            date_str = item['fcstTime']
+            date_str = date_str[0:2] + " : " + date_str[2:4]
+            weather_data["fcstTime"] = date_str
             weather_data['tmp'] = item['fcstValue']
 
 
