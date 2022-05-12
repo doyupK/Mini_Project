@@ -25,8 +25,9 @@ function get_locations() {
             // get_select_data(first, 0)
 
             if (!!sessionStorage.getItem("active")) {
-                let mapIdx = sessionStorage.getItem("active")
-                $(".land").eq(mapIdx).css("fill", "cadetblue").css("stroke", "aquamarine");
+                let mapId = sessionStorage.getItem("active")
+
+                $("#"+mapId).css("fill", "cadetblue").css("stroke", "aquamarine");
             }
 
         }
