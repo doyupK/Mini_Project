@@ -15,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&subset=korean"
           rel="stylesheet">
     <!--    CSS-->
-    <link rel="stylesheet" href="../static/css/main.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='./css/main.css') }}">
     <style>
         .card {
             box-shadow: 4px 4px 4px;
@@ -37,7 +37,7 @@
           rel="stylesheet">
 
     <!--    Sign Up 스크립트 불러오기   -->
-    <script src="../static/js/signup.js"></script>
+    <script src="{{ url_for('static',filename='./js/signup.js') }}"></script>
 
 
     <script>
@@ -221,7 +221,7 @@
                     </ul>
                 </nav>
                 <a href="/">
-                    <em><img src="../static/img/logo.png" alt="wineNot_logo"></em>
+                    <em><img src="{{ url_for('static',filename='./img/logo.png') }}" alt="wineNot_logo"></em>
                 </a>
                 <nav class="user_nav">
                     <ul>
@@ -260,7 +260,7 @@
             <div class="row p-0">
                 <div class="col-md-5 col-sm-5 col-lg-5">
                     <div class="card location-card h-100">
-                        <img src="../static/img/sample.jpg" class="card-img-top h-100" alt="...">
+                        <img src="{{ url_for('static',filename='./img/sample.jpg') }}" class="card-img-top h-100" alt="...">
                         <div class="card-body" style="border: none">
                             {% if beach is not none %}
                             <div class="card-title"><b>{{beach}}</b></div>
@@ -279,20 +279,20 @@
                                     <table class="table">
                                         <tbody>
                                         <tr>
-                                            <td>현재 기온: {{data.tmp}}</td>
+                                            <td>현재 기온: {{data.tmp}} ℃</td>
                                         </tr>
                                         <tr>
-                                            <td>현재 파고:{{data.wav}}M</td>
+                                            <td>현재 파고: {{data.wav}} M</td>
                                         </tr>
                                         <tr>
-                                            <td>풍향: {{data.vec}}deg</td>
+                                            <td>풍향: {{data.vec}} deg</td>
                                         </tr>
 
                                         <tr>
-                                            <td>현재 풍속: (동서){{data.uuu}}m/s</td>
+                                            <td>현재 풍속(동서): {{data.uuu}} m/s</td>
                                         </tr>
                                         <tr>
-                                            <td>현재 풍속: (남북){{data.vvv}}m/s</td>
+                                            <td>현재 풍속(남북): {{data.vvv}} m/s</td>
                                         </tr>
 
                                         </tbody>
@@ -307,8 +307,7 @@
                                         <thead>
                                         <tr>
                                             <th>시간</th>
-                                            <th>최고 기온</th>
-                                            <th>최저 기온</th>
+                                            <th>기온</th>
                                             <th>파고</th>
                                             <th>풍속(동서)</th>
                                             <th>풍속(남북)</th>
@@ -318,9 +317,8 @@
                                         <tbody>
                                         {% for item in weathers %}
                                         <tr>
-                                            <td>{{item.time}}</td>
-                                            <td>{{item.tmx}} ℃</td>
-                                            <td>{{item.tmn}} ℃</td>
+                                            <td>{{item.fcstTime}}</td>
+                                            <td>{{item.tmp}} ℃</td>
                                             <td>{{item.wav}} M</td>
                                             <td>{{item.uuu}} m/s</td>
                                             <td>{{item.vvv}} m/s</td>

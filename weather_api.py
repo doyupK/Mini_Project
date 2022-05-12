@@ -31,17 +31,19 @@ def get_current_base_time(opt=1):
     update_time = "0200 0500 0800 1100 1400 1700 2000 2300".split()
 
     base_date = today_date
-    if (hour < 2) and (minute <= 10):
+    if hour < 2:
         today_date = yesterday_date
         base_time = update_time.pop()
-    cnt = 1
-    for idx, time in enumerate(update_time):
-        if (cnt < hour) and (hour < (cnt + 4)):
-            base_time = update_time[idx]
 
-            break
-        else:
-            cnt += 3
+    else:
+        cnt = 1
+        for idx, time in enumerate(update_time):
+            if (cnt < hour) and (hour < (cnt + 4)):
+                base_time = update_time[idx]
+
+                break
+            else:
+                cnt += 3
 
     if opt == 0:
         return today, today_date, base_date, base_time
@@ -132,8 +134,9 @@ def weather_filter_info(response, base_time, opt):
             if not fcst_time == item['fcstTime']:
                 fcst_time = item['fcstTime']
                 print(weather_data)
-                all_time_data.append(weather_data)
-                weather_data = {}
+                if not weather_data.__len__() == 0:
+                    all_time_data.append(weather_data)
+                    weather_data = {}
 
         # 1 시간 기온 코드
         if category == 'TMP':
