@@ -15,14 +15,14 @@ li {
     z-index: 1;
 }
 .wrapper {
-    /*height: 1200px;*/
+    height: auto;
     min-height: 100%;
 }
 
 .container {
     position: relative;
     width: 1280px;
-    /*height: 1000px;*/
+    height: auto;
     margin: 0 auto;
 
 }
@@ -123,6 +123,7 @@ li {
 
 .area_col {
     width: 40%;
+    height: auto;
     text-align: center;
     box-shadow: 4px 4px 4px;
     float: left;
@@ -134,6 +135,24 @@ li {
     box-shadow: #a1a1a1 5px 5px 5px;
     transform: scale(1.1);
     border-radius: 15%;
+}
+
+.image_box {
+    height: 200px;
+        /*position: absolute;*/
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    /*transform: translate(-50%, -50%);*/
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+
+}
+
+.card-img-top_index {
+    max-height: 200px;
 }
 
 a {
@@ -181,8 +200,11 @@ a {
 
 /* FIN List */
 .post_size img{
-    height: 300px;
+    height: auto;
     display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
     width: 230px;
     margin: auto;
     max-width: 240px;
@@ -197,7 +219,7 @@ a {
 }
 .card:not(.location-card) {
     border: none;
-    margin-top: 60px;
+    /*margin-top: 60px;*/
 }
 .card_contents {
     width: 230px;

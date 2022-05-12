@@ -1,5 +1,5 @@
 .wrapper .container{
-    height: 1200px;
+    height: auto;
 }
 
 
@@ -34,7 +34,7 @@
 
 #title {
     padding-right: 50px;
-    height: 400px;
+    height: 450px;
     text-align: center;
 }
 
