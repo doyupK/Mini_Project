@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--    title Icon -->
+    <link href="../static/img/surf_icon.png" rel="shortcut icon" type="image/x-icon">
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +30,14 @@
 
     <title>끌</title>
 
+    <!--    font-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap"
           rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@500&family=Poppins:ital,wght@1,500&display=swap"
+          rel="stylesheet">
+
     <!--    CSS-->
     <link rel="stylesheet" href="../static/css/main.css">
     <!--    Sign Up 스크립트 불러오기   -->
@@ -159,7 +168,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         alert(response['msg'])
-                        window.location.replace("/")
+                        window.location.replace("/home")
                     } else {
                         alert(response['msg'])
                     }
@@ -167,47 +176,16 @@
             });
         }
 
-
-        // 지역top 불러오기 by JH
-        $(document).ready(function () {
-            commenst_get();
-        });
-        function commenst_get() {
-
-            $.ajax({
-                type: 'GET',
-                url: '/review',
-                data: {},
-                success: function (response) {
-                    let row = response['review']
-                    for (let i = 0; i < row.length; i++) {
-                        let location = row[i]['location']
-                        let sopt = row[i]['spot_name']
-                        let content = row[i]['content']
-                        let file = row[i]['file']
-
-                        let temp_html = ` <div class="area_col">
-                                            <div class="card h-100">
-                                                <img src="static/img/${file}" class="card-img-top" alt="...">
-                                                <div class="card-body">
-                                                    <h5 class="card-title"><b>${location}</b></h5>
-                                                    <p class="card-text">${sopt}</p>
-                                                    <p class="card-text">${content}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                        `
-                        $('#rank').append(temp_html)
-                    }
-
-                }
-            });
+        function goDetail(number) {
+            location.href = "/detail/" + number
         }
+
 
         $(function () {
             goLocationListsPage()
         })
     </script>
+    <link rel="stylesheet" href="main_prac.css">
 </head>
 <body>
 <!--                Login & sign Up Modal-->
@@ -342,29 +320,25 @@
                     </ul>
                 </nav>
                 <a href="/home">
-                    <em><img src="../static/img/logo2.png" alt="FIN_logo"></em>
+                    <img src="../static/img/logo2.png" alt="FIN_logo">
                 </a>
                 <nav class="user_nav">
                     <ul>
                         {% if login_status == 0 %}
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#loginModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-regular fa-user"></i>로그인
                                 </a>
                             </li>
-                        </strong>
-                        <strong>
                             <li class="nav-text">
                                 <a type="button" data-bs-toggle="modal"
                                    data-bs-target="#signUpModal" data-bs-whatever="@getbootstrap">
                                     <i class="fa-solid fa-pen-to-square"></i>회원가입</a></li>
-                        </strong>
                         {% elif login_status == 1 %}
-                        <li class="nav-text"><a>{{user_info.name}} 님</a></li>
-                        <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
-                            로그아웃</a></li>
+                            <li class="nav-text"><a>{{ user_info.name }} 님</a></li>
+                            <li class="nav-text"><a class="logout" onclick="logout()"><i class="fa-regular fa-user"></i>
+                                로그아웃</a></li>
                         {% endif %}
                     </ul>
 
@@ -454,32 +428,47 @@
                 <div class="area_top_title">
                     <p>지역 TOP</p>
                 </div>
-                <div id="rank" class="area_md" >
+                <div id="rank" class="area_md">
+                    {% for top_reveiw in top_reveiws %}
+                        <div class="area_col">
+                            <div class="card h-100">
+                                <img src="static/img/{{ top_reveiw.file }}" class="card-img-top" alt="..."
+                                     onclick="goDetail( '{{ top_reveiw.post_num }}' )">
+                                <div class="card-body">
+                                    <h5 class="card-title"><b>{{ top_reveiw.spot_name }}</b></h5>
+                                    <p class="card-text">{{ top_reveiw.location }}</p>
+                                    <p class="card-text">{{ top_reveiw.content }}</p>
+                                </div>
+                            </div>
+                        </div>
                 </div>
+                    {% endfor %}
+
+            </div>
 
         </div>
-            </div>
     </div>
 </div>
+</div>
 <!-- footer -->
-    <footer id="footer">
-        <div id="footer_info">
-            <div class="foot_container">
-                <div class="row">
-                    <div class="footer_info">
-                        <h2>
-                            <img src="../static/img/logo2.png">
-                        </h2>
-                        <ul>
-                            <li>4조</li>
-                            <li>이정찬</li>
-                            <li>임정현</li>
-                            <li>김도엽</li>
-                        </ul>
-                    </div>
+<footer id="footer">
+    <div id="footer_info">
+        <div class="foot_container">
+            <div class="row">
+                <div class="footer_info">
+                    <h2>
+                        <img src="../static/img/logo2.png" alt="FIN_logo">
+                    </h2>
+                    <ul>
+                        <li>4조</li>
+                        <li>이정찬</li>
+                        <li>임정현</li>
+                        <li>김도엽</li>
+                    </ul>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 </body>
 </html>
