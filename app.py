@@ -1,18 +1,14 @@
 import hashlib
 from datetime import datetime, timedelta
 
-from django.core.paginator import Paginator
-from pymongo import MongoClient
 import certifi
-from flask import Flask, render_template, request, jsonify
-from datetime import datetime, timedelta
 import jwt as jwt
-import googlemaps
+from django.core.paginator import Paginator
+from flask import Flask, render_template, request, jsonify
+
 import data_resource
 from get_data import get_locations, get_list_by_location
 from weather_api import get_weather_info, until_current_time_info
-
-
 
 gmap = data_resource.gmap
 
@@ -47,7 +43,6 @@ def home():
         return render_template('index.html', login_status=login_status, top_reveiws=top_reveiws)
 
 
-
 # 지역별 페이지 이동
 @app.route('/location_lists/<location>')
 def location_lists(location):
@@ -68,6 +63,13 @@ def find_by_city():
     received_city = request.args.get("city")
     return jsonify(get_list_by_location(received_city))
 
+#지역 상세 페이지
+@app.route('/locations/detail/<location>/<lat>/<lng>')
+def location_detail(location, lat, lng):
+    result = until_current_time_info(lat, lng)
+    weathers = result['weather']
+    print(weathers)
+    return render_template('location_detail.html', beach=location, data=weathers[0], weathers=weathers)
 
 # fin 게시글 저장 - 220509 DY
 @app.route('/surfer/write_post', methods=['POST'])
@@ -335,7 +337,6 @@ def delete_comment():
                                    {'$pull': {'COMMENT': {'comment_id': commentNum_receive}}})
 
     return jsonify({'msg': '삭제 완료!'})
-
 
 
 if __name__ == '__main__':
