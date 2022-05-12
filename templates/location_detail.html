@@ -552,7 +552,7 @@
                                         <tr>
                                             <th colspan="8">댓글</th>
                                             <th width="10%">
-                                                {% if user_info is not none %}
+                                                {% if login_status == 1 %}
                                                 <button class="btn btn-outline-secondary p-1" type="button"
                                                         data-bs-toggle="modal" data-bs-target="#write-comments">작성
                                                 </button>
